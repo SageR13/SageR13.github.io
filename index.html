@@ -862,99 +862,123 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        console.log('Script loaded');
-        
-        // Navigation
-        function showProject(projectId) {
-            console.log('Showing project:', projectId);
-            document.getElementById('main-content').style.display = 'none';
-            document.querySelectorAll('.project-detail').forEach(p => p.classList.remove('active'));
-            const projectElement = document.getElementById(projectId);
-            if (projectElement) {
-                projectElement.classList.add('active');
-            }
-            window.scrollTo(0, 0);
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing...');
             
-            // Initialize STL viewer if showing project-2
-            if (projectId === 'project-2') {
-                setTimeout(() => {
-                    if (!window.stlViewerInitialized) {
-                        initSTLViewer();
-                        // Load STL file automatically - UPDATE THIS PATH TO YOUR STL FILE
-                        loadSTLFromPath('your-model.stl');
-                    }
-                }, 100);
+            // Navigation functions
+            function showProject(projectId) {
+                console.log('Showing project:', projectId);
+                const mainContent = document.getElementById('main-content');
+                const projectElement = document.getElementById(projectId);
+                
+                if (mainContent) mainContent.style.display = 'none';
+                
+                document.querySelectorAll('.project-detail').forEach(p => {
+                    p.classList.remove('active');
+                });
+                
+                if (projectElement) {
+                    projectElement.classList.add('active');
+                    console.log('Project activated:', projectId);
+                }
+                
+                window.scrollTo(0, 0);
+                
+                // Initialize STL viewer if showing project-2
+                if (projectId === 'project-2') {
+                    setTimeout(() => {
+                        if (!window.stlViewerInitialized) {
+                            console.log('Initializing STL viewer...');
+                            initSTLViewer();
+                            loadSTLFromPath('your-model.stl');
+                        }
+                    }, 100);
+                }
             }
-        }
 
-        function showMain() {
-            document.getElementById('main-content').style.display = 'block';
-            document.querySelectorAll('.project-detail').forEach(p => p.classList.remove('active'));
-        }
+            function showMain() {
+                console.log('Showing main content');
+                const mainContent = document.getElementById('main-content');
+                if (mainContent) mainContent.style.display = 'block';
+                document.querySelectorAll('.project-detail').forEach(p => {
+                    p.classList.remove('active');
+                });
+            }
 
-        // Wait for DOM to be ready
-        setTimeout(() => {
+            // Make functions global
+            window.showProject = showProject;
+            window.showMain = showMain;
+
+            // Set up project card clicks
             const cards = document.querySelectorAll('.project-card');
             console.log('Found project cards:', cards.length);
+            
             cards.forEach(card => {
                 card.addEventListener('click', (e) => {
                     e.preventDefault();
-                    console.log('Card clicked:', card.getAttribute('href'));
-                    const projectId = card.getAttribute('href').substring(1);
+                    const href = card.getAttribute('href');
+                    console.log('Card clicked:', href);
+                    const projectId = href.substring(1);
                     showProject(projectId);
-                    history.pushState({project: projectId}, '', card.getAttribute('href'));
+                    history.pushState({project: projectId}, '', href);
                 });
             });
-        }, 100);
 
-        document.querySelectorAll('.back-button').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                showMain();
-                history.pushState({}, '', '#work');
+            // Set up back buttons
+            document.querySelectorAll('.back-button').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showMain();
+                    history.pushState({}, '', '#work');
+                });
             });
-        });
 
-        window.addEventListener('popstate', (e) => {
+            // Handle browser back/forward
+            window.addEventListener('popstate', (e) => {
+                const hash = window.location.hash;
+                if (hash && hash.startsWith('#project-')) {
+                    showProject(hash.substring(1));
+                } else {
+                    showMain();
+                }
+            });
+
+            // Check URL on load
             const hash = window.location.hash;
             if (hash && hash.startsWith('#project-')) {
                 showProject(hash.substring(1));
-            } else {
-                showMain();
             }
-        });
 
-        window.addEventListener('load', () => {
-            const hash = window.location.hash;
-            if (hash && hash.startsWith('#project-')) {
-                showProject(hash.substring(1));
-            }
-        });
-
-        document.querySelectorAll('a[href^="#"]:not(.project-card):not(.back-button)').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
+            // Smooth scrolling for nav links
+            document.querySelectorAll('a[href^="#"]:not(.project-card):not(.back-button)').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
             });
-        });
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
+            // Fade-in animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.project-card, .about-content').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'all 0.8s ease';
+                observer.observe(el);
             });
-        }, { threshold: 0.1 });
 
-        document.querySelectorAll('.project-card, .about-content').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(30px)';
-            el.style.transition = 'all 0.8s ease';
-            observer.observe(el);
+            console.log('Navigation initialized successfully');
         });
 
         // STL Viewer Code
