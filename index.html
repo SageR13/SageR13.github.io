@@ -334,6 +334,9 @@
                     geo.boundingBox.getCenter(center);
                     stlMesh.position.sub(center);
                     
+                    // Start with model upright (rotate 90 degrees)
+                    stlMesh.rotation.z = -Math.PI / 2;
+                    
                     const size = new THREE.Vector3();
                     geo.boundingBox.getSize(size);
                     const scale = 50 / Math.max(size.x, size.y, size.z);
