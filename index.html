@@ -97,7 +97,9 @@
                     </div>
                 </a>
                 <a href="#project-2" class="project-card">
-                    <div class="project-image">🦷</div>
+                    <div class="project-image" style="background:#fff">
+                        <img src="confident-logo.png" alt="confiDENT Logo" style="max-width:60%;max-height:60%;object-fit:contain">
+                    </div>
                     <div class="project-info">
                         <h3>confiDENT</h3>
                         <p>Innovative intraoral camera for dental diagnostics.</p>
@@ -164,8 +166,8 @@
         <div class="project-content">
             <div class="project-section">
                 <h2>3D Model Viewer</h2>
-                <div style="width:100%;height:500px;background:transparent;border:none;outline:none" id="stl-container">
-                    <div id="stl-loading" style="color:rgba(255,255,255,0.7);text-align:center;padding-top:200px">Loading 3D model...</div>
+                <div style="width:100%;height:500px;background:#f5f5f5;border:none;outline:none" id="stl-container">
+                    <div id="stl-loading" style="color:rgba(0,0,0,0.7);text-align:center;padding-top:200px">Loading 3D model...</div>
                 </div>
                 <p style="margin-top:1rem;font-size:0.9rem;color:rgba(255,255,255,0.6);text-align:center">
                     <strong>Controls:</strong> Left-click + drag to rotate • Right-click + drag to pan • Scroll to zoom
@@ -234,41 +236,45 @@
             if (!container || !window.THREE) return;
             
             stlScene = new THREE.Scene();
-            stlScene.background = new THREE.Color(0x0a0a0a);
+            stlScene.background = new THREE.Color(0xf5f5f5); // Light gray studio background
             stlCamera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
             stlCamera.position.set(0, 0, 100);
             
-            stlRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            stlRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
             stlRenderer.setSize(container.clientWidth, container.clientHeight);
             stlRenderer.shadowMap.enabled = true;
             stlRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            stlRenderer.toneMapping = THREE.ACESFilmicToneMapping;
+            stlRenderer.toneMappingExposure = 1.2;
             container.innerHTML = '';
             container.appendChild(stlRenderer.domElement);
             
-            // Better lighting setup for realism
-            const ambLight = new THREE.AmbientLight(0xffffff, 0.4);
+            // Studio lighting setup - soft and even like product photography
+            const ambLight = new THREE.AmbientLight(0xffffff, 0.6);
             stlScene.add(ambLight);
             
-            // Main key light
-            const keyLight = new THREE.DirectionalLight(0xffffff, 1.0);
-            keyLight.position.set(5, 5, 5);
+            // Main key light (from above-right, like studio softbox)
+            const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
+            keyLight.position.set(10, 10, 10);
             keyLight.castShadow = true;
+            keyLight.shadow.mapSize.width = 2048;
+            keyLight.shadow.mapSize.height = 2048;
             stlScene.add(keyLight);
             
-            // Fill light (softer, from opposite side)
-            const fillLight = new THREE.DirectionalLight(0xadd8e6, 0.5);
-            fillLight.position.set(-3, 2, -3);
+            // Fill light (from left, softer)
+            const fillLight = new THREE.DirectionalLight(0xffffff, 0.6);
+            fillLight.position.set(-10, 5, 5);
             stlScene.add(fillLight);
             
-            // Rim light (highlights edges)
-            const rimLight = new THREE.DirectionalLight(0xffffff, 0.6);
-            rimLight.position.set(0, -3, -5);
+            // Back rim light (highlights edges like studio photography)
+            const rimLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            rimLight.position.set(0, -5, -10);
             stlScene.add(rimLight);
             
-            // Add point light for highlights
-            const pointLight = new THREE.PointLight(0xffffff, 0.5);
-            pointLight.position.set(0, 10, 10);
-            stlScene.add(pointLight);
+            // Soft overhead light
+            const topLight = new THREE.DirectionalLight(0xffffff, 0.4);
+            topLight.position.set(0, 15, 0);
+            stlScene.add(topLight);
             
             addMouseControls(container);
             loadSTL('./your-model.stl');
@@ -346,14 +352,14 @@
                 .then(data => {
                     const geo = parseSTL(data);
                     
-                    // Realistic material - smooth medical-grade plastic
+                    // Professional white product material
                     const mat = new THREE.MeshStandardMaterial({
-                        color: 0xe8f4f8,        // Light blue-white medical color
-                        metalness: 0.1,          // Slight metallic sheen
-                        roughness: 0.3,          // Smooth but not mirror-like
-                        clearcoat: 0.5,          // Glossy clear coat layer
-                        clearcoatRoughness: 0.2, // Smooth clear coat
-                        envMapIntensity: 1.0     // Environment reflections
+                        color: 0xffffff,         // Pure white like the reference
+                        metalness: 0.05,         // Minimal metallic (plastic)
+                        roughness: 0.25,         // Smooth plastic finish
+                        clearcoat: 0.6,          // Glossy clear coat layer
+                        clearcoatRoughness: 0.15, // Very smooth clear coat
+                        envMapIntensity: 1.2     // Strong reflections for polish
                     });
                     
                     stlMesh = new THREE.Mesh(geo, mat);
