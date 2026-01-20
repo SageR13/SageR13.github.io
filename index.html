@@ -269,6 +269,9 @@
                     geo.boundingBox.getCenter(center);
                     stlMesh.position.sub(center);
                     
+                    // Rotate to stand upright (tilt 90 degrees around X axis)
+                    stlMesh.rotation.x = Math.PI / 2;
+                    
                     const size = new THREE.Vector3();
                     geo.boundingBox.getSize(size);
                     const scale = 50 / Math.max(size.x, size.y, size.z);
@@ -309,7 +312,9 @@
         
         function animate() {
             requestAnimationFrame(animate);
-            if (stlMesh) stlMesh.rotation.y += 0.005;
+            if (stlMesh) {
+                stlMesh.rotation.y += 0.01; // Rotate around vertical axis (Y)
+            }
             if (stlRenderer && stlScene && stlCamera) stlRenderer.render(stlScene, stlCamera);
         }
 
