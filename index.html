@@ -42,8 +42,8 @@
         .contact-links { display: flex; justify-content: center; gap: 2rem; }
         .contact-link { padding: 1rem 2rem; background: rgba(255,255,255,0.05); color: var(--text); text-decoration: none; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s; }
         .contact-link:hover { background: rgba(100,108,255,0.2); border-color: var(--accent); }
-        .project-detail { display: none; min-height: 100vh; padding: 8rem 4rem 4rem; }
-        .project-detail.active { display: block; }
+        .project-detail { display: none !important; min-height: 100vh; padding: 8rem 4rem 4rem; }
+        .project-detail.active { display: block !important; }
         .back-button { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text); text-decoration: none; margin-bottom: 3rem; }
         .back-button:hover { color: var(--accent); }
         .project-header { max-width: 1200px; margin: 0 auto 4rem; }
@@ -163,6 +163,12 @@
         <div class="project-header"><h1>confiDENT</h1></div>
         <div class="project-content">
             <div class="project-section">
+                <h2>3D Model Viewer</h2>
+                <div style="width:100%;height:500px;background:linear-gradient(to bottom,#1a1a2e,#16213e);border-radius:20px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.1)" id="stl-container">
+                    <div id="stl-loading" style="color:rgba(255,255,255,0.7);text-align:center">Loading 3D model...</div>
+                </div>
+            </div>
+            <div class="project-section">
                 <h2>Challenge</h2>
                 <p>Dental professionals needed a more ergonomic intraoral camera for diagnostics.</p>
             </div>
@@ -193,49 +199,152 @@
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            function showProject(id) {
-                document.getElementById('main-content').style.display = 'none';
-                document.querySelectorAll('.project-detail').forEach(p => p.classList.remove('active'));
-                document.getElementById(id).classList.add('active');
+        console.log('Script loading...');
+        let stlScene, stlCamera, stlRenderer, stlMesh;
+        
+        function showProject(id) {
+            console.log('Showing project:', id);
+            const main = document.getElementById('main-content');
+            const project = document.getElementById(id);
+            
+            if (main) main.style.display = 'none';
+            
+            document.querySelectorAll('.project-detail').forEach(p => {
+                p.classList.remove('active');
+            });
+            
+            if (project) {
+                project.classList.add('active');
                 window.scrollTo(0, 0);
+                
+                // Initialize STL viewer for project-2
+                if (id === 'project-2' && !window.stlInitialized) {
+                    setTimeout(initSTL, 100);
+                }
             }
-
-            function showMain() {
-                document.getElementById('main-content').style.display = 'block';
-                document.querySelectorAll('.project-detail').forEach(p => p.classList.remove('active'));
+        }
+        
+        function initSTL() {
+            const container = document.getElementById('stl-container');
+            if (!container || !window.THREE) return;
+            
+            stlScene = new THREE.Scene();
+            stlScene.background = new THREE.Color(0x1a1a2e);
+            stlCamera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+            stlCamera.position.set(0, 0, 100);
+            
+            stlRenderer = new THREE.WebGLRenderer({ antialias: true });
+            stlRenderer.setSize(container.clientWidth, container.clientHeight);
+            container.innerHTML = '';
+            container.appendChild(stlRenderer.domElement);
+            
+            const ambLight = new THREE.AmbientLight(0xffffff, 0.6);
+            stlScene.add(ambLight);
+            const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            dirLight.position.set(1, 1, 1);
+            stlScene.add(dirLight);
+            
+            // IMPORTANT: Update this path to your actual STL file
+            // For example: './your-dental-camera.stl' or './models/camera.stl'
+            loadSTL('./your-model.stl');
+            animate();
+            window.stlInitialized = true;
+        }
+        
+        function loadSTL(path) {
+            const loading = document.getElementById('stl-loading');
+            if (loading) loading.style.display = 'block';
+            
+            fetch(path)
+                .then(r => r.arrayBuffer())
+                .then(data => {
+                    const geo = parseSTL(data);
+                    const mat = new THREE.MeshPhongMaterial({ color: 0x646cff });
+                    stlMesh = new THREE.Mesh(geo, mat);
+                    
+                    geo.computeBoundingBox();
+                    const center = new THREE.Vector3();
+                    geo.boundingBox.getCenter(center);
+                    stlMesh.position.sub(center);
+                    
+                    const size = new THREE.Vector3();
+                    geo.boundingBox.getSize(size);
+                    const scale = 50 / Math.max(size.x, size.y, size.z);
+                    stlMesh.scale.setScalar(scale);
+                    
+                    stlScene.add(stlMesh);
+                    if (loading) loading.style.display = 'none';
+                })
+                .catch(err => {
+                    console.error('STL error:', err);
+                    if (loading) loading.innerHTML = 'STL file not found. Upload your .stl file to GitHub.';
+                });
+        }
+        
+        function parseSTL(buf) {
+            const view = new DataView(buf);
+            const faces = view.getUint32(80, true);
+            const verts = [], norms = [];
+            
+            for (let i = 0; i < faces; i++) {
+                const off = 84 + i * 50;
+                const nx = view.getFloat32(off, true);
+                const ny = view.getFloat32(off + 4, true);
+                const nz = view.getFloat32(off + 8, true);
+                
+                for (let j = 0; j < 3; j++) {
+                    const vo = off + 12 + j * 12;
+                    verts.push(view.getFloat32(vo, true), view.getFloat32(vo + 4, true), view.getFloat32(vo + 8, true));
+                    norms.push(nx, ny, nz);
+                }
             }
+            
+            const geo = new THREE.BufferGeometry();
+            geo.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+            geo.setAttribute('normal', new THREE.Float32BufferAttribute(norms, 3));
+            return geo;
+        }
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            if (stlMesh) stlMesh.rotation.y += 0.005;
+            if (stlRenderer && stlScene && stlCamera) stlRenderer.render(stlScene, stlCamera);
+        }
 
-            document.querySelectorAll('.project-card').forEach(card => {
-                card.addEventListener('click', (e) => {
+        function showMain() {
+            console.log('Showing main');
+            const main = document.getElementById('main-content');
+            if (main) main.style.display = 'block';
+            
+            document.querySelectorAll('.project-detail').forEach(p => {
+                p.classList.remove('active');
+            });
+        }
+
+        window.addEventListener('load', function() {
+            console.log('Page loaded');
+            
+            const cards = document.querySelectorAll('.project-card');
+            console.log('Found cards:', cards.length);
+            
+            cards.forEach(card => {
+                card.addEventListener('click', function(e) {
                     e.preventDefault();
-                    const id = card.getAttribute('href').substring(1);
+                    console.log('Card clicked!');
+                    const href = this.getAttribute('href');
+                    const id = href.substring(1);
                     showProject(id);
-                    history.pushState({project: id}, '', card.getAttribute('href'));
                 });
             });
 
             document.querySelectorAll('.back-button').forEach(btn => {
-                btn.addEventListener('click', (e) => {
+                btn.addEventListener('click', function(e) {
                     e.preventDefault();
                     showMain();
-                    history.pushState({}, '', '#work');
                 });
             });
-
-            window.addEventListener('popstate', () => {
-                const hash = window.location.hash;
-                if (hash && hash.startsWith('#project-')) {
-                    showProject(hash.substring(1));
-                } else {
-                    showMain();
-                }
-            });
-
-            if (window.location.hash && window.location.hash.startsWith('#project-')) {
-                showProject(window.location.hash.substring(1));
-            }
         });
     </script>
 </body>
