@@ -269,8 +269,8 @@
                     geo.boundingBox.getCenter(center);
                     stlMesh.position.sub(center);
                     
-                    // Rotate to stand upright (tilt 90 degrees around X axis)
-                    stlMesh.rotation.x = Math.PI / 2;
+                    // Rotate to stand upright (tilt 90 degrees around Z axis)
+                    stlMesh.rotation.z = Math.PI / 2;
                     
                     const size = new THREE.Vector3();
                     geo.boundingBox.getSize(size);
