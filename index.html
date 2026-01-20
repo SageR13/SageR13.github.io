@@ -873,3 +873,351 @@
             if (projectId === 'project-2') {
                 setTimeout(() => {
                     if (!window.stlViewerInitialized) {
+                        initSTLViewer();
+                        // Load STL file automatically - UPDATE THIS PATH TO YOUR STL FILE
+                        loadSTLFromPath('your-model.stl');
+                    }
+                }, 100);
+            }
+        }
+
+        function showMain() {
+            document.getElementById('main-content').style.display = 'block';
+            document.querySelectorAll('.project-detail').forEach(p => p.classList.remove('active'));
+        }
+
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                e.preventDefault();
+                const projectId = card.getAttribute('href').substring(1);
+                showProject(projectId);
+                history.pushState({project: projectId}, '', card.getAttribute('href'));
+            });
+        });
+
+        document.querySelectorAll('.back-button').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                showMain();
+                history.pushState({}, '', '#work');
+            });
+        });
+
+        window.addEventListener('popstate', (e) => {
+            const hash = window.location.hash;
+            if (hash && hash.startsWith('#project-')) {
+                showProject(hash.substring(1));
+            } else {
+                showMain();
+            }
+        });
+
+        window.addEventListener('load', () => {
+            const hash = window.location.hash;
+            if (hash && hash.startsWith('#project-')) {
+                showProject(hash.substring(1));
+            }
+        });
+
+        document.querySelectorAll('a[href^="#"]:not(.project-card):not(.back-button)').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.project-card, .about-content').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.8s ease';
+            observer.observe(el);
+        });
+
+        // STL Viewer Code
+        let stlScene, stlCamera, stlRenderer, stlMesh;
+        let stlWireframeMode = false;
+        window.stlViewerInitialized = false;
+
+        function initSTLViewer() {
+            const container = document.getElementById('stl-canvas-container');
+            if (!container || !window.THREE) return;
+
+            stlScene = new THREE.Scene();
+            stlScene.background = new THREE.Color(0x1a1a2e);
+
+            stlCamera = new THREE.PerspectiveCamera(
+                45,
+                container.clientWidth / container.clientHeight,
+                0.1,
+                1000
+            );
+            stlCamera.position.set(0, 0, 100);
+
+            stlRenderer = new THREE.WebGLRenderer({ antialias: true });
+            stlRenderer.setSize(container.clientWidth, container.clientHeight);
+            stlRenderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(stlRenderer.domElement);
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            stlScene.add(ambientLight);
+
+            const directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight1.position.set(1, 1, 1);
+            stlScene.add(directionalLight1);
+
+            const directionalLight2 = new THREE.DirectionalLight(0x646cff, 0.4);
+            directionalLight2.position.set(-1, -1, -1);
+            stlScene.add(directionalLight2);
+
+            setupSTLControls();
+            animateSTL();
+            window.stlViewerInitialized = true;
+
+            window.addEventListener('resize', () => {
+                if (stlCamera && stlRenderer && container) {
+                    stlCamera.aspect = container.clientWidth / container.clientHeight;
+                    stlCamera.updateProjectionMatrix();
+                    stlRenderer.setSize(container.clientWidth, container.clientHeight);
+                }
+            });
+        }
+
+        function setupSTLControls() {
+            const container = document.getElementById('stl-canvas-container');
+            let isDragging = false;
+            let isPanning = false;
+            let previousMousePosition = { x: 0, y: 0 };
+
+            container.addEventListener('mousedown', (e) => {
+                if (e.button === 0) isDragging = true;
+                if (e.button === 2) isPanning = true;
+                previousMousePosition = { x: e.clientX, y: e.clientY };
+            });
+
+            container.addEventListener('mousemove', (e) => {
+                if (!stlMesh) return;
+
+                const deltaMove = {
+                    x: e.clientX - previousMousePosition.x,
+                    y: e.clientY - previousMousePosition.y
+                };
+
+                if (isDragging) {
+                    stlMesh.rotation.y += deltaMove.x * 0.01;
+                    stlMesh.rotation.x += deltaMove.y * 0.01;
+                }
+
+                if (isPanning) {
+                    stlCamera.position.x -= deltaMove.x * 0.05;
+                    stlCamera.position.y += deltaMove.y * 0.05;
+                }
+
+                previousMousePosition = { x: e.clientX, y: e.clientY };
+            });
+
+            container.addEventListener('mouseup', () => {
+                isDragging = false;
+                isPanning = false;
+            });
+
+            container.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const delta = e.deltaY * 0.05;
+                stlCamera.position.z += delta;
+                stlCamera.position.z = Math.max(10, Math.min(500, stlCamera.position.z));
+            });
+
+            container.addEventListener('contextmenu', (e) => e.preventDefault());
+
+            container.addEventListener('dblclick', () => {
+                if (stlMesh) {
+                    stlCamera.position.set(0, 0, 100);
+                    stlCamera.lookAt(0, 0, 0);
+                }
+            });
+        }
+
+        function animateSTL() {
+            requestAnimationFrame(animateSTL);
+            if (stlRenderer && stlScene && stlCamera) {
+                stlRenderer.render(stlScene, stlCamera);
+            }
+        }
+
+        function loadSTLFromPath(filePath) {
+            const loading = document.getElementById('stl-loading');
+            loading.classList.add('active');
+
+            fetch(filePath)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`STL file not found at: ${filePath}`);
+                    }
+                    return response.arrayBuffer();
+                })
+                .then(arrayBuffer => {
+                    const geometry = parseSTL(arrayBuffer);
+                    displaySTLGeometry(geometry, arrayBuffer.byteLength);
+                    loading.classList.remove('active');
+                })
+                .catch(error => {
+                    console.error('Error loading STL:', error);
+                    loading.innerHTML = `Error: STL file not found.<br><br>Please place your STL file in the same folder as this HTML file and name it 'your-model.stl'<br>or update the file path in the code.`;
+                });
+        }
+
+        function displaySTLGeometry(geometry, fileSize) {
+            if (stlMesh) {
+                stlScene.remove(stlMesh);
+            }
+
+            const material = new THREE.MeshPhongMaterial({
+                color: 0x646cff,
+                specular: 0x111111,
+                shininess: 200,
+                flatShading: false
+            });
+
+            stlMesh = new THREE.Mesh(geometry, material);
+
+            geometry.computeBoundingBox();
+            const boundingBox = geometry.boundingBox;
+            const center = new THREE.Vector3();
+            boundingBox.getCenter(center);
+            stlMesh.position.sub(center);
+
+            const size = new THREE.Vector3();
+            boundingBox.getSize(size);
+            const maxDim = Math.max(size.x, size.y, size.z);
+            const scale = 50 / maxDim;
+            stlMesh.scale.setScalar(scale);
+
+            stlScene.add(stlMesh);
+
+            document.getElementById('stl-triangles').textContent = (geometry.attributes.position.count / 3).toLocaleString();
+            document.getElementById('stl-vertices').textContent = geometry.attributes.position.count.toLocaleString();
+            document.getElementById('stl-filesize').textContent = formatFileSize(fileSize);
+
+            stlCamera.position.set(0, 0, 100);
+        }
+
+        function parseSTL(arrayBuffer) {
+            const view = new DataView(arrayBuffer);
+            const isASCII = isASCIISTL(arrayBuffer);
+
+            if (isASCII) {
+                return parseASCIISTL(new TextDecoder().decode(arrayBuffer));
+            } else {
+                return parseBinarySTL(view);
+            }
+        }
+
+        function isASCIISTL(arrayBuffer) {
+            const view = new Uint8Array(arrayBuffer);
+            const header = String.fromCharCode.apply(null, view.subarray(0, 5));
+            return header === 'solid';
+        }
+
+        function parseBinarySTL(view) {
+            const triangles = view.getUint32(80, true);
+            const vertices = [];
+            const normals = [];
+
+            for (let i = 0; i < triangles; i++) {
+                const offset = 84 + i * 50;
+
+                const nx = view.getFloat32(offset, true);
+                const ny = view.getFloat32(offset + 4, true);
+                const nz = view.getFloat32(offset + 8, true);
+
+                for (let j = 0; j < 3; j++) {
+                    const vOffset = offset + 12 + j * 12;
+                    vertices.push(
+                        view.getFloat32(vOffset, true),
+                        view.getFloat32(vOffset + 4, true),
+                        view.getFloat32(vOffset + 8, true)
+                    );
+                    normals.push(nx, ny, nz);
+                }
+            }
+
+            const geometry = new THREE.BufferGeometry();
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geometry.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3));
+            return geometry;
+        }
+
+        function parseASCIISTL(text) {
+            const vertices = [];
+            const normals = [];
+            const normalPattern = /normal\s+([-+]?\d*\.?\d+(?:[eE][-+]?\d+)?)\s+([-+]?\d*\.?\d+(?:[eE][-+]?\d+)?)\s+([-+]?\d*\.?\d+(?:[eE][-+]?\d+)?)/g;
+            const vertexPattern = /vertex\s+([-+]?\d*\.?\d+(?:[eE][-+]?\d+)?)\s+([-+]?\d*\.?\d+(?:[eE][-+]?\d+)?)\s+([-+]?\d*\.?\d+(?:[eE][-+]?\d+)?)/g;
+
+            let normalMatch;
+            const normalsList = [];
+            while ((normalMatch = normalPattern.exec(text)) !== null) {
+                normalsList.push([
+                    parseFloat(normalMatch[1]),
+                    parseFloat(normalMatch[2]),
+                    parseFloat(normalMatch[3])
+                ]);
+            }
+
+            let vertexMatch;
+            let normalIndex = 0;
+            let vertexCount = 0;
+            while ((vertexMatch = vertexPattern.exec(text)) !== null) {
+                vertices.push(
+                    parseFloat(vertexMatch[1]),
+                    parseFloat(vertexMatch[2]),
+                    parseFloat(vertexMatch[3])
+                );
+                
+                if (normalIndex < normalsList.length) {
+                    normals.push(...normalsList[normalIndex]);
+                }
+                
+                vertexCount++;
+                if (vertexCount % 3 === 0) {
+                    normalIndex++;
+                }
+            }
+
+            const geometry = new THREE.BufferGeometry();
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geometry.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3));
+            return geometry;
+        }
+
+        function resetSTLView() {
+            if (stlMesh) {
+                stlMesh.rotation.set(0, 0, 0);
+                stlCamera.position.set(0, 0, 100);
+                stlCamera.lookAt(0, 0, 0);
+            }
+        }
+
+        function toggleSTLWireframe() {
+            if (stlMesh) {
+                stlWireframeMode = !stlWireframeMode;
+                stlMesh.material.wireframe = stlWireframeMode;
+            }
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
