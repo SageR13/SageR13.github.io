@@ -164,8 +164,8 @@
         <div class="project-content">
             <div class="project-section">
                 <h2>3D Model Viewer</h2>
-                <div style="width:100%;height:500px;background:linear-gradient(to bottom,#1a1a2e,#16213e)" id="stl-container">
-                    <div id="stl-loading" style="color:rgba(255,255,255,0.7);text-align:center">Loading 3D model...</div>
+                <div style="width:100%;height:500px;background:transparent;border:none;outline:none" id="stl-container">
+                    <div id="stl-loading" style="color:rgba(255,255,255,0.7);text-align:center;padding-top:200px">Loading 3D model...</div>
                 </div>
                 <p style="margin-top:1rem;font-size:0.9rem;color:rgba(255,255,255,0.6);text-align:center">
                     <strong>Controls:</strong> Left-click + drag to rotate • Right-click + drag to pan • Scroll to zoom
@@ -234,24 +234,43 @@
             if (!container || !window.THREE) return;
             
             stlScene = new THREE.Scene();
-            stlScene.background = new THREE.Color(0x1a1a2e);
+            stlScene.background = new THREE.Color(0x0a0a0a);
             stlCamera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
             stlCamera.position.set(0, 0, 100);
             
-            stlRenderer = new THREE.WebGLRenderer({ antialias: true });
+            stlRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             stlRenderer.setSize(container.clientWidth, container.clientHeight);
+            stlRenderer.shadowMap.enabled = true;
+            stlRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
             container.innerHTML = '';
             container.appendChild(stlRenderer.domElement);
             
-            const ambLight = new THREE.AmbientLight(0xffffff, 0.6);
+            // Better lighting setup for realism
+            const ambLight = new THREE.AmbientLight(0xffffff, 0.4);
             stlScene.add(ambLight);
-            const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-            dirLight.position.set(1, 1, 1);
-            stlScene.add(dirLight);
             
-            // Add mouse controls
+            // Main key light
+            const keyLight = new THREE.DirectionalLight(0xffffff, 1.0);
+            keyLight.position.set(5, 5, 5);
+            keyLight.castShadow = true;
+            stlScene.add(keyLight);
+            
+            // Fill light (softer, from opposite side)
+            const fillLight = new THREE.DirectionalLight(0xadd8e6, 0.5);
+            fillLight.position.set(-3, 2, -3);
+            stlScene.add(fillLight);
+            
+            // Rim light (highlights edges)
+            const rimLight = new THREE.DirectionalLight(0xffffff, 0.6);
+            rimLight.position.set(0, -3, -5);
+            stlScene.add(rimLight);
+            
+            // Add point light for highlights
+            const pointLight = new THREE.PointLight(0xffffff, 0.5);
+            pointLight.position.set(0, 10, 10);
+            stlScene.add(pointLight);
+            
             addMouseControls(container);
-            
             loadSTL('./your-model.stl');
             animate();
             window.stlInitialized = true;
@@ -326,7 +345,17 @@
                 .then(r => r.arrayBuffer())
                 .then(data => {
                     const geo = parseSTL(data);
-                    const mat = new THREE.MeshPhongMaterial({ color: 0x646cff });
+                    
+                    // Realistic material - smooth medical-grade plastic
+                    const mat = new THREE.MeshStandardMaterial({
+                        color: 0xe8f4f8,        // Light blue-white medical color
+                        metalness: 0.1,          // Slight metallic sheen
+                        roughness: 0.3,          // Smooth but not mirror-like
+                        clearcoat: 0.5,          // Glossy clear coat layer
+                        clearcoatRoughness: 0.2, // Smooth clear coat
+                        envMapIntensity: 1.0     // Environment reflections
+                    });
+                    
                     stlMesh = new THREE.Mesh(geo, mat);
                     
                     geo.computeBoundingBox();
@@ -334,13 +363,16 @@
                     geo.boundingBox.getCenter(center);
                     stlMesh.position.sub(center);
                     
-                    // Start with model upright (rotate 90 degrees)
+                    // Start with model upright
                     stlMesh.rotation.z = -Math.PI / 2;
                     
                     const size = new THREE.Vector3();
                     geo.boundingBox.getSize(size);
                     const scale = 50 / Math.max(size.x, size.y, size.z);
                     stlMesh.scale.setScalar(scale);
+                    
+                    stlMesh.castShadow = true;
+                    stlMesh.receiveShadow = true;
                     
                     stlScene.add(stlMesh);
                     if (loading) loading.style.display = 'none';
