@@ -160,20 +160,20 @@
         </div>
     </div>
 
-    <div id="project-2" class="project-detail" style="background:#f5f2ed;">
+    <div id="project-2" class="project-detail" style="background:#f5f2ed;min-height:100vh;">
         <a href="#work" class="back-button" style="color:#4a5d6d;">← Back to Projects</a>
         <div class="project-header">
             <h1 style="color:#4a5d6d;">confiDENT</h1>
             <p style="color:#7a8c9d;font-size:1.2rem;font-weight:500;">An At-Home Intraoral Camera for Oral Health Monitoring</p>
         </div>
-        <div class="project-content">
+        <div class="project-content" style="max-width:1400px;">
             <div class="project-section">
                 <h2 style="color:#4a5d6d;margin-bottom:1.5rem;">Final Product</h2>
                 <div style="display:grid;grid-template-columns:1fr 2fr;gap:1rem;margin-bottom:1rem;">
-                    <div style="background:#f8f6f3;border-radius:12px;overflow:hidden;">
+                    <div style="background:transparent;border-radius:12px;overflow:hidden;">
                         <img src="2.jpg" alt="confiDENT in use" style="width:100%;height:100%;object-fit:cover;">
                     </div>
-                    <div style="background:#f8f6f3;border-radius:12px;overflow:hidden;">
+                    <div style="background:transparent;border-radius:12px;overflow:hidden;">
                         <img src="4.jpg" alt="confiDENT product showcase" style="width:100%;height:100%;object-fit:cover;">
                     </div>
                 </div>
@@ -181,7 +181,7 @@
             
             <div class="project-section" style="margin-top:3rem;">
                 <h2 style="color:#4a5d6d;">3D Model Viewer</h2>
-                <div style="width:100%;height:500px;background:#fff;border:none;outline:none;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.08);" id="stl-container">
+                <div style="width:100%;height:500px;background:transparent;border:none;outline:none;border-radius:12px;" id="stl-container">
                     <div id="stl-loading" style="color:#7a8c9d;text-align:center;padding-top:200px">Loading 3D model...</div>
                 </div>
                 <p style="margin-top:1rem;font-size:0.9rem;color:#7a8c9d;text-align:center">
@@ -285,37 +285,32 @@
 
             <div class="project-section" style="margin-top:3rem;">
                 <h2 style="color:#4a5d6d;margin-bottom:1.5rem;">Companion App Features</h2>
-                <div style="background:#fff;padding:3rem 2rem;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.06);margin-bottom:2rem;">
-                    <div style="display:flex;gap:2rem;overflow-x:auto;padding-bottom:1rem;justify-content:center;">
+                <div style="background:transparent;padding:2rem 0;margin-bottom:2rem;overflow-x:auto;">
+                    <div style="display:flex;gap:2rem;padding-bottom:1rem;min-width:min-content;">
                         <div style="flex:0 0 auto;text-align:center;">
                             <img src="home.png" alt="App Homepage" style="height:500px;width:auto;object-fit:contain;">
                             <p style="margin-top:1rem;color:#4a5d6d;font-weight:600;">Homepage</p>
-                            <p style="font-size:0.85rem;color:#7a8c9d;margin-top:0.3rem;">Ready for quick check</p>
+                            <p style="font-size:0.85rem;color:#7a8c9d;margin-top:0.3rem;max-width:250px;margin-left:auto;margin-right:auto;">Ready for quick check</p>
                         </div>
                         <div style="flex:0 0 auto;text-align:center;">
                             <img src="inspect.png" alt="Camera Interface" style="height:500px;width:auto;object-fit:contain;">
                             <p style="margin-top:1rem;color:#4a5d6d;font-weight:600;">Camera</p>
-                            <p style="font-size:0.85rem;color:#7a8c9d;margin-top:0.3rem;">Clearly record conditions</p>
+                            <p style="font-size:0.85rem;color:#7a8c9d;margin-top:0.3rem;max-width:250px;margin-left:auto;margin-right:auto;">Clearly record conditions</p>
                         </div>
                         <div style="flex:0 0 auto;text-align:center;">
                             <img src="gall.png" alt="Photo Album" style="height:500px;width:auto;object-fit:contain;">
                             <p style="margin-top:1rem;color:#4a5d6d;font-weight:600;">Photo Album</p>
-                            <p style="font-size:0.85rem;color:#7a8c9d;margin-top:0.3rem;">All photos & videos</p>
+                            <p style="font-size:0.85rem;color:#7a8c9d;margin-top:0.3rem;max-width:250px;margin-left:auto;margin-right:auto;">All photos & videos</p>
                         </div>
                         <div style="flex:0 0 auto;text-align:center;">
                             <img src="pop.png" alt="Appointments" style="height:500px;width:auto;object-fit:contain;">
                             <p style="margin-top:1rem;color:#4a5d6d;font-weight:600;">Appointment</p>
-                            <p style="font-size:0.85rem;color:#7a8c9d;margin-top:0.3rem;">Emergency scheduling</p>
-                        </div>
-                        <div style="flex:0 0 auto;text-align:center;">
-                            <img src="inspect.png" alt="Documentation" style="height:500px;width:auto;object-fit:contain;">
-                            <p style="margin-top:1rem;color:#4a5d6d;font-weight:600;">Documentation</p>
-                            <p style="font-size:0.85rem;color:#7a8c9d;margin-top:0.3rem;">Daily routine tracking</p>
+                            <p style="font-size:0.85rem;color:#7a8c9d;margin-top:0.3rem;max-width:250px;margin-left:auto;margin-right:auto;">Emergency scheduling</p>
                         </div>
                         <div style="flex:0 0 auto;text-align:center;">
                             <img src="dm.png" alt="Sharing" style="height:500px;width:auto;object-fit:contain;">
                             <p style="margin-top:1rem;color:#4a5d6d;font-weight:600;">Sharing</p>
-                            <p style="font-size:0.85rem;color:#7a8c9d;margin-top:0.3rem;">Share with professionals</p>
+                            <p style="font-size:0.85rem;color:#7a8c9d;margin-top:0.3rem;max-width:250px;margin-left:auto;margin-right:auto;">Share with professionals</p>
                         </div>
                     </div>
                 </div>
