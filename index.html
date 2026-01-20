@@ -167,6 +167,9 @@
                 <div style="width:100%;height:500px;background:linear-gradient(to bottom,#1a1a2e,#16213e);border-radius:20px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.1)" id="stl-container">
                     <div id="stl-loading" style="color:rgba(255,255,255,0.7);text-align:center">Loading 3D model...</div>
                 </div>
+                <p style="margin-top:1rem;font-size:0.9rem;color:rgba(255,255,255,0.6);text-align:center">
+                    <strong>Controls:</strong> Left-click + drag to rotate • Right-click + drag to pan • Scroll to zoom
+                </p>
             </div>
             <div class="project-section">
                 <h2>Challenge</h2>
@@ -246,11 +249,73 @@
             dirLight.position.set(1, 1, 1);
             stlScene.add(dirLight);
             
-            // IMPORTANT: Update this path to your actual STL file
-            // For example: './your-dental-camera.stl' or './models/camera.stl'
+            // Add mouse controls
+            addMouseControls(container);
+            
             loadSTL('./your-model.stl');
             animate();
             window.stlInitialized = true;
+        }
+        
+        function addMouseControls(container) {
+            let isDragging = false;
+            let isPanning = false;
+            let prevMouse = { x: 0, y: 0 };
+            
+            container.style.cursor = 'grab';
+            
+            container.addEventListener('mousedown', (e) => {
+                if (e.button === 0) { // Left click
+                    isDragging = true;
+                    container.style.cursor = 'grabbing';
+                } else if (e.button === 2) { // Right click
+                    isPanning = true;
+                }
+                prevMouse = { x: e.clientX, y: e.clientY };
+            });
+            
+            container.addEventListener('mousemove', (e) => {
+                if (!stlMesh) return;
+                
+                const deltaX = e.clientX - prevMouse.x;
+                const deltaY = e.clientY - prevMouse.y;
+                
+                if (isDragging) {
+                    // Rotate model
+                    stlMesh.rotation.y += deltaX * 0.01;
+                    stlMesh.rotation.x += deltaY * 0.01;
+                }
+                
+                if (isPanning) {
+                    // Pan camera
+                    stlCamera.position.x -= deltaX * 0.1;
+                    stlCamera.position.y += deltaY * 0.1;
+                }
+                
+                prevMouse = { x: e.clientX, y: e.clientY };
+            });
+            
+            container.addEventListener('mouseup', () => {
+                isDragging = false;
+                isPanning = false;
+                container.style.cursor = 'grab';
+            });
+            
+            container.addEventListener('mouseleave', () => {
+                isDragging = false;
+                isPanning = false;
+                container.style.cursor = 'grab';
+            });
+            
+            // Zoom with mouse wheel
+            container.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                stlCamera.position.z += e.deltaY * 0.1;
+                stlCamera.position.z = Math.max(20, Math.min(200, stlCamera.position.z));
+            });
+            
+            // Prevent context menu on right click
+            container.addEventListener('contextmenu', (e) => e.preventDefault());
         }
         
         function loadSTL(path) {
@@ -268,9 +333,6 @@
                     const center = new THREE.Vector3();
                     geo.boundingBox.getCenter(center);
                     stlMesh.position.sub(center);
-                    
-                    // Rotate to stand upright (tilt 90 degrees around Z axis)
-                    stlMesh.rotation.z = Math.PI / 2;
                     
                     const size = new THREE.Vector3();
                     geo.boundingBox.getSize(size);
@@ -312,9 +374,7 @@
         
         function animate() {
             requestAnimationFrame(animate);
-            if (stlMesh) {
-                stlMesh.rotation.y += 0.01; // Rotate around vertical axis (Y)
-            }
+            // Model now controlled by mouse - no auto-rotation
             if (stlRenderer && stlScene && stlCamera) stlRenderer.render(stlScene, stlCamera);
         }
 
