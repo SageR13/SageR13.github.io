@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Design Portfolio</title>
+    <title>Interactive STL Viewer</title>
     <style>
         * {
             margin: 0;
@@ -19,13 +19,16 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg);
             color: var(--text);
-            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
 
-        /* Animated gradient background */
         .bg-gradient {
             position: fixed;
             top: 0;
@@ -43,449 +46,231 @@
             50% { opacity: 0.5; }
         }
 
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
+        .container {
             width: 100%;
-            padding: 2rem 4rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-            background: rgba(10, 10, 10, 0.5);
+            max-width: 1200px;
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 3rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text);
-            text-decoration: none;
-            font-size: 0.95rem;
-            position: relative;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: var(--accent);
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent);
-            transition: width 0.3s;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 0 4rem;
-            position: relative;
-        }
-
-        .hero-content h1 {
-            font-size: clamp(3rem, 8vw, 7rem);
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: clamp(2rem, 4vw, 3rem);
             font-weight: 800;
-            line-height: 1;
-            margin-bottom: 1.5rem;
             background: linear-gradient(135deg, #ffffff 0%, #646cff 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: fadeInUp 1s ease;
         }
 
-        .hero-content p {
-            font-size: clamp(1.2rem, 2vw, 1.5rem);
-            color: rgba(255, 255, 255, 0.7);
-            max-width: 600px;
-            margin-bottom: 3rem;
-            animation: fadeInUp 1s ease 0.2s backwards;
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 1rem 2.5rem;
-            background: var(--accent);
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
-            transition: all 0.3s;
-            animation: fadeInUp 1s ease 0.4s backwards;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-button::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .cta-button:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(100, 108, 255, 0.4);
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Projects Grid */
-        .projects {
-            padding: 8rem 4rem;
-        }
-
-        .section-title {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            margin-bottom: 4rem;
-            text-align: center;
-        }
-
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 3rem;
-        }
-
-        .project-card {
+        .viewer-card {
             background: rgba(255, 255, 255, 0.03);
             border-radius: 20px;
             overflow: hidden;
-            cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            text-decoration: none;
-            color: inherit;
-            display: block;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         }
 
-        .project-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--accent);
-            box-shadow: 0 20px 60px rgba(100, 108, 255, 0.3);
-        }
-
-        .project-image {
+        #canvas-container {
             width: 100%;
-            height: 300px;
-            background: linear-gradient(135deg, var(--accent), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            transition: transform 0.5s;
+            height: 600px;
+            position: relative;
+            background: linear-gradient(to bottom, #1a1a2e 0%, #16213e 100%);
+            cursor: grab;
         }
 
-        .project-card:hover .project-image {
-            transform: scale(1.05);
+        #canvas-container:active {
+            cursor: grabbing;
         }
 
-        .project-info {
-            padding: 2rem;
-        }
-
-        .project-info h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .project-info p {
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             color: rgba(255, 255, 255, 0.7);
-            line-height: 1.6;
-            margin-bottom: 1rem;
-        }
-
-        .project-tags {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-        .tag {
-            padding: 0.4rem 1rem;
-            background: rgba(100, 108, 255, 0.2);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: var(--accent);
-        }
-
-        /* About Section */
-        .about {
-            padding: 8rem 4rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .about-text h2 {
-            font-size: clamp(2rem, 4vw, 3rem);
-            margin-bottom: 2rem;
-        }
-
-        .about-text p {
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
-        }
-
-        .skills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .skill {
-            padding: 0.8rem 1.5rem;
-            background: rgba(100, 108, 255, 0.1);
-            border: 1px solid rgba(100, 108, 255, 0.3);
-            border-radius: 30px;
-            transition: all 0.3s;
-        }
-
-        .skill:hover {
-            background: rgba(100, 108, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        /* Contact Section */
-        .contact {
-            padding: 8rem 4rem;
+            font-size: 1.2rem;
+            display: none;
             text-align: center;
         }
 
-        .contact h2 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            margin-bottom: 2rem;
+        .loading.active {
+            display: block;
         }
 
-        .contact p {
-            font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 3rem;
+        .controls {
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .contact-links {
+        .file-input-wrapper {
             display: flex;
-            justify-content: center;
-            gap: 2rem;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
         }
 
-        .contact-link {
-            padding: 1rem 2rem;
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text);
-            text-decoration: none;
+        .file-input-label {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(100, 108, 255, 0.1);
+            border: 2px solid rgba(100, 108, 255, 0.3);
             border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            cursor: pointer;
             transition: all 0.3s;
         }
 
-        .contact-link:hover {
+        input[type="file"]:hover {
             background: rgba(100, 108, 255, 0.2);
+            border-color: var(--accent);
+        }
+
+        input[type="file"]::file-selector-button {
+            padding: 0.5rem 1rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-right: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background: var(--secondary);
+            transform: translateY(-1px);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 1rem 1.5rem;
+            background: rgba(100, 108, 255, 0.2);
+            color: var(--text);
+            border: 1px solid rgba(100, 108, 255, 0.3);
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        button:hover {
+            background: rgba(100, 108, 255, 0.3);
             border-color: var(--accent);
             transform: translateY(-2px);
         }
 
-        /* Project Detail Page */
-        .project-detail {
-            display: none;
-            min-height: 100vh;
-            padding: 8rem 4rem 4rem;
+        button:active {
+            transform: translateY(0);
         }
 
-        .project-detail.active {
-            display: block;
-        }
-
-        .back-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--text);
-            text-decoration: none;
-            font-size: 1rem;
-            margin-bottom: 3rem;
-            transition: all 0.3s;
-        }
-
-        .back-button:hover {
-            color: var(--accent);
-            transform: translateX(-5px);
-        }
-
-        .project-header {
-            max-width: 1200px;
-            margin: 0 auto 4rem;
-        }
-
-        .project-header h1 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            margin-bottom: 1.5rem;
-        }
-
-        .project-meta {
-            display: flex;
-            gap: 2rem;
-            margin-bottom: 2rem;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .project-hero-image {
-            width: 100%;
-            height: 500px;
-            background: linear-gradient(135deg, var(--accent), var(--secondary));
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 6rem;
-            margin-bottom: 4rem;
-        }
-
-        .project-content {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .project-section {
-            margin-bottom: 4rem;
-        }
-
-        .project-section h2 {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .project-section p {
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.8;
-            margin-bottom: 1rem;
-        }
-
-        .project-section ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .project-section li {
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.8;
-            margin-bottom: 0.5rem;
-            padding-left: 1.5rem;
-            position: relative;
-        }
-
-        .project-section li::before {
-            content: '→';
-            position: absolute;
-            left: 0;
-            color: var(--accent);
-        }
-
-        .project-images {
+        .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .project-image-item {
-            width: 100%;
-            height: 300px;
-            background: rgba(100, 108, 255, 0.1);
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .info-item {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(100, 108, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(100, 108, 255, 0.1);
         }
 
-        /* Responsive */
+        .info-label {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .instructions {
+            background: rgba(100, 108, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1.5rem;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            border: 1px solid rgba(100, 108, 255, 0.1);
+        }
+
+        .instructions strong {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .placeholder-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        .placeholder-text {
+            font-size: 1.2rem;
+        }
+
         @media (max-width: 768px) {
-            nav {
-                padding: 1.5rem 2rem;
+            body {
+                padding: 10px;
             }
 
-            .nav-links {
-                gap: 1.5rem;
+            h1 {
+                font-size: 1.8rem;
+                margin-bottom: 1rem;
             }
 
-            .hero, .projects, .about, .contact {
-                padding: 4rem 2rem;
+            #canvas-container {
+                height: 400px;
             }
 
-            .projects-grid {
-                grid-template-columns: 1fr;
+            .controls {
+                padding: 1.5rem;
             }
 
-            .about-content {
-                grid-template-columns: 1fr;
-            }
-
-            .contact-links {
+            .file-input-wrapper {
                 flex-direction: column;
-                align-items: center;
             }
 
-            .project-detail {
-                padding: 6rem 2rem 2rem;
+            .button-group {
+                flex-direction: column;
             }
 
-            .project-hero-image {
-                height: 300px;
-                font-size: 4rem;
+            button {
+                width: 100%;
             }
         }
     </style>
@@ -493,465 +278,331 @@
 <body>
     <div class="bg-gradient"></div>
     
-    <nav>
-        <div class="logo">Sage Rebello</div>
-        <ul class="nav-links">
-            <li><a href="#work">Work</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </nav>
-
-    <!-- Main Portfolio Content -->
-    <div id="main-content">
-        <section class="hero">
-            <div class="hero-content">
-                <h1>Innovative Designer<br>& Creator</h1>
-                <p>Designing human-centered experiences that blend innovation with empathy. Specializing in design engineering anddigital transformation.</p>
-                <a href="#work" class="cta-button">View My Work</a>
-            </div>
-        </section>
-
-        <section id="work" class="projects">
-            <h2 class="section-title">Selected Work</h2>
-            <div class="projects-gridfigma">
-                <a href="#project-1" class="project-card" data-project="1">
-                    <div class="project-image">🎨</div>
-                    <div class="project-info">
-                        <h3>Financial Services Redesign</h3>
-                        <p>Led end-to-end redesign of a digital banking platform, increasing user engagement by 45% and reducing support tickets by 30%.</p>
-                        <div class="project-tags">
-                            <span class="tag">UX Design</span>
-                            <span class="tag">Strategy</span>
-                            <span class="tag">Research</span>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="#project-2" class="project-card" data-project="2">
-                    <div class="project-image">🚀</div>
-                    <div class="project-info">
-                        <h3>Healthcare Innovation</h3>
-                        <p>Designed a patient-centered telehealth experience that improved accessibility and reduced appointment no-shows by 60%.</p>
-                        <div class="project-tags">
-                            <span class="tag">Service Design</span>
-                            <span class="tag">Healthcare</span>
-                            <span class="tag">Innovation</span>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="#project-3" class="project-card" data-project="3">
-                    <div class="project-image">💡</div>
-                    <div class="project-info">
-                        <h3>Sustainable Supply Chain</h3>
-                        <p>Developed a data visualization dashboard for tracking ESG metrics across global supply chains for Fortune 500 client.</p>
-                        <div class="project-tags">
-                            <span class="tag">Data Viz</span>
-                            <span class="tag">Sustainability</span>
-                            <span class="tag">Enterprise</span>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="#project-4" class="project-card" data-project="4">
-                    <div class="project-image">🎯</div>
-                    <div class="project-info">
-                        <h3>Retail Experience Platform</h3>
-                        <p>Created an omnichannel retail experience that seamlessly integrates physical and digital touchpoints.</p>
-                        <div class="project-tags">
-                            <span class="tag">Omnichannel</span>
-                            <span class="tag">Retail</span>
-                            <span class="tag">CX Design</span>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </section>
-
-        <section id="about" class="about">
-            <div class="about-content">
-                <div class="about-text">
-                    <h2>Design with Purpose</h2>
-                    <p>I'm a designer who believes in the power of human-centered design to solve complex business challenges. With a background in design thinking and strategic consulting, I help organizations transform their digital experiences.</p>
-                    <p>My approach combines rigorous research, creative problem-solving, and collaborative iteration to deliver solutions that resonate with users and drive business value.</p>
-                    <div class="skills">
-                        <span class="skill">Design Thinking</span>
-                        <span class="skill">UX/UI Design</span>
-                        <span class="skill">Service Design</span>
-                        <span class="skill">Prototyping</span>
-                        <span class="skill">Design Strategy</span>
-                        <span class="skill">User Research</span>
-                        <span class="skill">Figma</span>
-                        <span class="skill">Adobe CC</span>
-                    </div>
+    <div class="container">
+        <h1>🔷 Interactive STL Viewer</h1>
+        <div class="viewer-card">
+            <div id="canvas-container">
+                <div class="placeholder" id="placeholder">
+                    <div class="placeholder-icon">📦</div>
+                    <div class="placeholder-text">Upload an STL file to begin</div>
                 </div>
-                <div class="about-image">
-                    <div style="width: 100%; height: 500px; background: linear-gradient(135deg, rgba(100, 108, 255, 0.3), rgba(83, 91, 242, 0.3)); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 5rem; border: 1px solid rgba(255, 255, 255, 0.1);">
-                        👤
-                    </div>
+                <div class="loading" id="loading">
+                    <div>Loading 3D model...</div>
                 </div>
             </div>
-        </section>
-
-        <section id="contact" class="contact">
-            <h2>Let's Connect</h2>
-            <p>Interested in working together? Let's create something amazing.</p>
-            <div class="contact-links">
-                <a href="mailto:your.email@example.com" class="contact-link">Email Me</a>
-                <a href="https://linkedin.com" class="contact-link">LinkedIn</a>
-                <a href="#" class="contact-link">Download Resume</a>
-            </div>
-        </section>
-    </div>
-
-    <!-- Project Detail Pages -->
-    <div id="project-1" class="project-detail">
-        <a href="#work" class="back-button">← Back to Projects</a>
-        <div class="project-header">
-            <h1>Financial Services Redesign</h1>
-            <div class="project-meta">
-                <span>Client: Major Banking Institution</span>
-                <span>Year: 2024</span>
-                <span>Role: Lead UX Designer</span>
-            </div>
-            <div class="project-tags">
-                <span class="tag">UX Design</span>
-                <span class="tag">Strategy</span>
-                <span class="tag">Research</span>
-            </div>
-        </div>
-        
-        <div class="project-hero-image">🎨</div>
-        
-        <div class="project-content">
-            <div class="project-section">
-                <h2>Challenge</h2>
-                <p>A leading financial institution was struggling with declining user engagement and increasing customer support tickets. Their digital banking platform was outdated, difficult to navigate, and didn't meet modern user expectations.</p>
-            </div>
-
-            <div class="project-section">
-                <h2>Approach</h2>
-                <p>We conducted comprehensive user research including:</p>
-                <ul>
-                    <li>30+ user interviews across different demographics</li>
-                    <li>Competitive analysis of top digital banking platforms</li>
-                    <li>Usability testing of existing platform</li>
-                    <li>Journey mapping to identify pain points</li>
-                </ul>
-            </div>
-
-            <div class="project-section">
-                <h2>Solution</h2>
-                <p>We redesigned the entire digital banking experience with a focus on intuitive navigation, personalized dashboards, and streamlined transaction flows. Key features included:</p>
-                <ul>
-                    <li>Smart financial insights powered by data visualization</li>
-                    <li>One-tap bill payments and transfers</li>
-                    <li>Personalized spending analytics</li>
-                    <li>Enhanced security with biometric authentication</li>
-                </ul>
-            </div>
-
-            <div class="project-section">
-                <h2>Results</h2>
-                <ul>
-                    <li>45% increase in user engagement</li>
-                    <li>30% reduction in customer support tickets</li>
-                    <li>4.8/5 average user satisfaction rating</li>
-                    <li>20% increase in mobile app adoption</li>
-                </ul>
-            </div>
-
-            <div class="project-section">
-                <h2>Design Highlights</h2>
-                <div class="project-images">
-                    <div class="project-image-item">📊</div>
-                    <div class="project-image-item">💳</div>
-                    <div class="project-image-item">📱</div>
+            <div class="controls">
+                <div class="file-input-wrapper">
+                    <div class="file-input-label">
+                        <input type="file" id="fileInput" accept=".stl" />
+                    </div>
+                    <div class="button-group">
+                        <button onclick="resetView()">Reset View</button>
+                        <button onclick="toggleWireframe()">Toggle Wireframe</button>
+                    </div>
+                </div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Triangles</div>
+                        <div class="info-value" id="triangles">-</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Vertices</div>
+                        <div class="info-value" id="vertices">-</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">File Size</div>
+                        <div class="info-value" id="filesize">-</div>
+                    </div>
+                </div>
+                <div class="instructions">
+                    <strong>Controls:</strong> Left click + drag to rotate • Right click + drag to pan • Scroll to zoom • Double click to focus
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="project-2" class="project-detail">
-        <a href="#work" class="back-button">← Back to Projects</a>
-        <div class="project-header">
-            <h1>Healthcare Innovation</h1>
-            <div class="project-meta">
-                <span>Client: Regional Healthcare Network</span>
-                <span>Year: 2024</span>
-                <span>Role: Service Design Lead</span>
-            </div>
-            <div class="project-tags">
-                <span class="tag">Service Design</span>
-                <span class="tag">Healthcare</span>
-                <span class="tag">Innovation</span>
-            </div>
-        </div>
-        
-        <div class="project-hero-image">🚀</div>
-        
-        <div class="project-content">
-            <div class="project-section">
-                <h2>Challenge</h2>
-                <p>A regional healthcare network faced high appointment no-show rates and accessibility challenges, particularly for patients in rural areas. The existing telehealth solution was underutilized and difficult to use.</p>
-            </div>
-
-            <div class="project-section">
-                <h2>Approach</h2>
-                <p>We took a human-centered approach to understand the needs of both patients and healthcare providers:</p>
-                <ul>
-                    <li>Ethnographic research with patients and doctors</li>
-                    <li>Service blueprinting to map the entire care journey</li>
-                    <li>Co-creation workshops with stakeholders</li>
-                    <li>Accessibility audits and compliance review</li>
-                </ul>
-            </div>
-
-            <div class="project-section">
-                <h2>Solution</h2>
-                <p>We designed a patient-centered telehealth platform that prioritizes accessibility and ease of use:</p>
-                <ul>
-                    <li>Simplified scheduling with automated reminders</li>
-                    <li>One-click video consultations</li>
-                    <li>Integrated prescription management</li>
-                    <li>Multi-language support and accessibility features</li>
-                </ul>
-            </div>
-
-            <div class="project-section">
-                <h2>Results</h2>
-                <ul>
-                    <li>60% reduction in appointment no-shows</li>
-                    <li>85% patient satisfaction score</li>
-                    <li>3x increase in telehealth adoption</li>
-                    <li>Improved access for rural patients</li>
-                </ul>
-            </div>
-
-            <div class="project-section">
-                <h2>Design Highlights</h2>
-                <div class="project-images">
-                    <div class="project-image-item">🏥</div>
-                    <div class="project-image-item">📅</div>
-                    <div class="project-image-item">💊</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="project-3" class="project-detail">
-        <a href="#work" class="back-button">← Back to Projects</a>
-        <div class="project-header">
-            <h1>Sustainable Supply Chain</h1>
-            <div class="project-meta">
-                <span>Client: Fortune 500 Manufacturing Company</span>
-                <span>Year: 2024</span>
-                <span>Role: Data Visualization Designer</span>
-            </div>
-            <div class="project-tags">
-                <span class="tag">Data Viz</span>
-                <span class="tag">Sustainability</span>
-                <span class="tag">Enterprise</span>
-            </div>
-        </div>
-        
-        <div class="project-hero-image">💡</div>
-        
-        <div class="project-content">
-            <div class="project-section">
-                <h2>Challenge</h2>
-                <p>A Fortune 500 manufacturing company needed to track and report ESG (Environmental, Social, and Governance) metrics across their global supply chain. Existing tools were fragmented and data was difficult to interpret.</p>
-            </div>
-
-            <div class="project-section">
-                <h2>Approach</h2>
-                <p>We designed a comprehensive data visualization dashboard:</p>
-                <ul>
-                    <li>Stakeholder workshops to define key metrics</li>
-                    <li>Information architecture for complex data sets</li>
-                    <li>Visual design exploration for clarity and impact</li>
-                    <li>Interactive prototyping and user testing</li>
-                </ul>
-            </div>
-
-            <div class="project-section">
-                <h2>Solution</h2>
-                <p>An enterprise dashboard that transforms complex sustainability data into actionable insights:</p>
-                <ul>
-                    <li>Real-time tracking of carbon emissions</li>
-                    <li>Supply chain transparency visualization</li>
-                    <li>Automated compliance reporting</li>
-                    <li>Predictive analytics for sustainability goals</li>
-                </ul>
-            </div>
-
-            <div class="project-section">
-                <h2>Results</h2>
-                <ul>
-                    <li>70% reduction in reporting time</li>
-                    <li>Improved supplier accountability</li>
-                    <li>Enhanced investor transparency</li>
-                    <li>Achieved carbon neutrality targets ahead of schedule</li>
-                </ul>
-            </div>
-
-            <div class="project-section">
-                <h2>Design Highlights</h2>
-                <div class="project-images">
-                    <div class="project-image-item">📈</div>
-                    <div class="project-image-item">🌍</div>
-                    <div class="project-image-item">⚡</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="project-4" class="project-detail">
-        <a href="#work" class="back-button">← Back to Projects</a>
-        <div class="project-header">
-            <h1>Retail Experience Platform</h1>
-            <div class="project-meta">
-                <span>Client: National Retail Chain</span>
-                <span>Year: 2024</span>
-                <span>Role: CX Design Lead</span>
-            </div>
-            <div class="project-tags">
-                <span class="tag">Omnichannel</span>
-                <span class="tag">Retail</span>
-                <span class="tag">CX Design</span>
-            </div>
-        </div>
-        
-        <div class="project-hero-image">🎯</div>
-        
-        <div class="project-content">
-            <div class="project-section">
-                <h2>Challenge</h2>
-                <p>A national retail chain needed to create a seamless experience across their physical stores, website, and mobile app. Customers were frustrated by disconnected touchpoints and inconsistent experiences.</p>
-            </div>
-
-            <div class="project-section">
-                <h2>Approach</h2>
-                <p>We designed an omnichannel experience strategy:</p>
-                <ul>
-                    <li>Customer journey mapping across all touchpoints</li>
-                    <li>In-store ethnographic research</li>
-                    <li>Digital experience audits</li>
-                    <li>Service design workshops with staff</li>
-                </ul>
-            </div>
-
-            <div class="project-section">
-                <h2>Solution</h2>
-                <p>A unified platform that connects physical and digital experiences:</p>
-                <ul>
-                    <li>Scan-and-go mobile checkout</li>
-                    <li>In-store product lookup and reviews</li>
-                    <li>Buy online, pick up in store (BOPIS)</li>
-                    <li>Personalized recommendations across channels</li>
-                </ul>
-            </div>
-
-            <div class="project-section">
-                <h2>Results</h2>
-                <ul>
-                    <li>35% increase in customer satisfaction</li>
-                    <li>25% boost in cross-channel purchases</li>
-                    <li>50% reduction in checkout wait times</li>
-                    <li>Improved inventory accuracy and management</li>
-                </ul>
-            </div>
-
-            <div class="project-section">
-                <h2>Design Highlights</h2>
-                <div class="project-images">
-                    <div class="project-image-item">🛍️</div>
-                    <div class="project-image-item">📲</div>
-                    <div class="project-image-item">🏬</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        // Handle navigation between main portfolio and project pages
-        function showProject(projectId) {
-            document.getElementById('main-content').style.display = 'none';
-            document.querySelectorAll('.project-detail').forEach(p => p.classList.remove('active'));
-            document.getElementById(projectId).classList.add('active');
-            window.scrollTo(0, 0);
+        let scene, camera, renderer, mesh, controls;
+        let wireframeMode = false;
+        const container = document.getElementById('canvas-container');
+        const fileInput = document.getElementById('fileInput');
+        const loading = document.getElementById('loading');
+        const placeholder = document.getElementById('placeholder');
+
+        // Initialize Three.js scene
+        function init() {
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a2e);
+
+            camera = new THREE.PerspectiveCamera(
+                45,
+                container.clientWidth / container.clientHeight,
+                0.1,
+                1000
+            );
+            camera.position.set(0, 0, 100);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+
+            const directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight1.position.set(1, 1, 1);
+            scene.add(directionalLight1);
+
+            const directionalLight2 = new THREE.DirectionalLight(0x646cff, 0.4);
+            directionalLight2.position.set(-1, -1, -1);
+            scene.add(directionalLight2);
+
+            // Mouse controls
+            setupControls();
+
+            // Handle window resize
+            window.addEventListener('resize', onWindowResize);
+
+            animate();
         }
 
-        function showMain() {
-            document.getElementById('main-content').style.display = 'block';
-            document.querySelectorAll('.project-detail').forEach(p => p.classList.remove('active'));
+        // Custom mouse controls
+        function setupControls() {
+            let isDragging = false;
+            let isPanning = false;
+            let previousMousePosition = { x: 0, y: 0 };
+
+            container.addEventListener('mousedown', (e) => {
+                if (e.button === 0) isDragging = true;
+                if (e.button === 2) isPanning = true;
+                previousMousePosition = { x: e.clientX, y: e.clientY };
+            });
+
+            container.addEventListener('mousemove', (e) => {
+                if (!mesh) return;
+
+                const deltaMove = {
+                    x: e.clientX - previousMousePosition.x,
+                    y: e.clientY - previousMousePosition.y
+                };
+
+                if (isDragging) {
+                    mesh.rotation.y += deltaMove.x * 0.01;
+                    mesh.rotation.x += deltaMove.y * 0.01;
+                }
+
+                if (isPanning) {
+                    camera.position.x -= deltaMove.x * 0.05;
+                    camera.position.y += deltaMove.y * 0.05;
+                }
+
+                previousMousePosition = { x: e.clientX, y: e.clientY };
+            });
+
+            container.addEventListener('mouseup', () => {
+                isDragging = false;
+                isPanning = false;
+            });
+
+            container.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const delta = e.deltaY * 0.05;
+                camera.position.z += delta;
+                camera.position.z = Math.max(10, Math.min(500, camera.position.z));
+            });
+
+            container.addEventListener('contextmenu', (e) => e.preventDefault());
+
+            container.addEventListener('dblclick', () => {
+                if (mesh) {
+                    camera.lookAt(mesh.position);
+                }
+            });
         }
 
-        // Project card clicks
-        document.querySelectorAll('.project-card').forEach(card => {
-            card.addEventListener('click', (e) => {
-                e.preventDefault();
-                const projectId = card.getAttribute('href').substring(1);
-                showProject(projectId);
-                history.pushState({project: projectId}, '', card.getAttribute('href'));
-            });
+        function onWindowResize() {
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+
+        // Load STL file
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                loadSTL(file);
+            }
         });
 
-        // Back button clicks
-        document.querySelectorAll('.back-button').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                showMain();
-                history.pushState({}, '', '#work');
-            });
-        });
+        function loadSTL(file) {
+            loading.classList.add('active');
+            placeholder.style.display = 'none';
 
-        // Handle browser back/forward buttons
-        window.addEventListener('popstate', (e) => {
-            const hash = window.location.hash;
-            if (hash && hash.startsWith('#project-')) {
-                showProject(hash.substring(1));
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const arrayBuffer = event.target.result;
+                const geometry = parseSTL(arrayBuffer);
+
+                if (mesh) {
+                    scene.remove(mesh);
+                }
+
+                const material = new THREE.MeshPhongMaterial({
+                    color: 0x646cff,
+                    specular: 0x111111,
+                    shininess: 200,
+                    flatShading: false
+                });
+
+                mesh = new THREE.Mesh(geometry, material);
+
+                // Center and scale the model
+                geometry.computeBoundingBox();
+                const boundingBox = geometry.boundingBox;
+                const center = new THREE.Vector3();
+                boundingBox.getCenter(center);
+                mesh.position.sub(center);
+
+                const size = new THREE.Vector3();
+                boundingBox.getSize(size);
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const scale = 50 / maxDim;
+                mesh.scale.setScalar(scale);
+
+                scene.add(mesh);
+
+                // Update stats
+                document.getElementById('triangles').textContent = geometry.attributes.position.count / 3;
+                document.getElementById('vertices').textContent = geometry.attributes.position.count;
+                document.getElementById('filesize').textContent = formatFileSize(file.size);
+
+                loading.classList.remove('active');
+                camera.position.set(0, 0, 100);
+            };
+
+            reader.readAsArrayBuffer(file);
+        }
+
+        // Parse STL file
+        function parseSTL(arrayBuffer) {
+            const view = new DataView(arrayBuffer);
+            const isASCII = isASCIISTL(arrayBuffer);
+
+            if (isASCII) {
+                return parseASCIISTL(new TextDecoder().decode(arrayBuffer));
             } else {
-                showMain();
+                return parseBinarySTL(view);
             }
-        });
+        }
 
-        // Check URL on load
-        window.addEventListener('load', () => {
-            const hash = window.location.hash;
-            if (hash && hash.startsWith('#project-')) {
-                showProject(hash.substring(1));
+        function isASCIISTL(arrayBuffer) {
+            const view = new Uint8Array(arrayBuffer);
+            const header = String.fromCharCode.apply(null, view.subarray(0, 5));
+            return header === 'solid';
+        }
+
+        function parseBinarySTL(view) {
+            const triangles = view.getUint32(80, true);
+            const vertices = [];
+            const normals = [];
+
+            for (let i = 0; i < triangles; i++) {
+                const offset = 84 + i * 50;
+
+                const nx = view.getFloat32(offset, true);
+                const ny = view.getFloat32(offset + 4, true);
+                const nz = view.getFloat32(offset + 8, true);
+
+                for (let j = 0; j < 3; j++) {
+                    const vOffset = offset + 12 + j * 12;
+                    vertices.push(
+                        view.getFloat32(vOffset, true),
+                        view.getFloat32(vOffset + 4, true),
+                        view.getFloat32(vOffset + 8, true)
+                    );
+                    normals.push(nx, ny, nz);
+                }
             }
-        });
 
-        // Smooth scrolling
-        document.querySelectorAll('a[href^="#"]:not(.project-card):not(.back-button)').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const geometry = new THREE.BufferGeometry();
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geometry.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3));
+            return geometry;
+        }
+
+        function parseASCIISTL(text) {
+            const vertices = [];
+            const normals = [];
+            const normalPattern = /normal\s+([-+]?\d*\.?\d+(?:[eE][-+]?\d+)?)\s+([-+]?\d*\.?\d+(?:[eE][-+]?\d+)?)\s+([-+]?\d*\.?\d+(?:[eE][-+]?\d+)?)/g;
+            const vertexPattern = /vertex\s+([-+]?\d*\.?\d+(?:[eE][-+]?\d+)?)\s+([-+]?\d*\.?\d+(?:[eE][-+]?\d+)?)\s+([-+]?\d*\.?\d+(?:[eE][-+]?\d+)?)/g;
+
+            let normalMatch;
+            const normalsList = [];
+            while ((normalMatch = normalPattern.exec(text)) !== null) {
+                normalsList.push([
+                    parseFloat(normalMatch[1]),
+                    parseFloat(normalMatch[2]),
+                    parseFloat(normalMatch[3])
+                ]);
+            }
+
+            let vertexMatch;
+            let normalIndex = 0;
+            let vertexCount = 0;
+            while ((vertexMatch = vertexPattern.exec(text)) !== null) {
+                vertices.push(
+                    parseFloat(vertexMatch[1]),
+                    parseFloat(vertexMatch[2]),
+                    parseFloat(vertexMatch[3])
+                );
+                
+                if (normalIndex < normalsList.length) {
+                    normals.push(...normalsList[normalIndex]);
                 }
-            });
-        });
-
-        // Intersection Observer for fade-in animations
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
+                
+                vertexCount++;
+                if (vertexCount % 3 === 0) {
+                    normalIndex++;
                 }
-            });
-        }, { threshold: 0.1 });
+            }
 
-        document.querySelectorAll('.project-card, .about-content').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(30px)';
-            el.style.transition = 'all 0.8s ease';
-            observer.observe(el);
-        });
+            const geometry = new THREE.BufferGeometry();
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geometry.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3));
+            return geometry;
+        }
+
+        function resetView() {
+            if (mesh) {
+                mesh.rotation.set(0, 0, 0);
+                camera.position.set(0, 0, 100);
+                camera.lookAt(0, 0, 0);
+            }
+        }
+
+        function toggleWireframe() {
+            if (mesh) {
+                wireframeMode = !wireframeMode;
+                mesh.material.wireframe = wireframeMode;
+            }
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+
+        // Initialize on load
+        init();
     </script>
 </body>
 </html>
