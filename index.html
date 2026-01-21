@@ -37,16 +37,21 @@
             white-space: nowrap;
         }
         #target {
-            display: inline-block;
-            min-width: 9ch; /* reserves space for longest word */
-            text-align: left;
+            display: inline-flex;
+            align-items: center;
+        
+            min-width: 12ch;           /* stable width */
+            padding-inline: 0.5ch;     /* keeps cursor inside */
+            
             transition: color 0.25s ease, transform 0.25s ease;
             cursor: pointer;
         }
+        
         #target.you {
             color: #ff4d4d;
             transform: scale(1.05);
         }
+
         .cta-button { display: inline-block; padding: 1rem 2.5rem; background: var(--accent); color: white; text-decoration: none; border-radius: 50px; font-weight: 600; transition: all 0.3s; }
         .cta-button:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(100,108,255,0.4); }
         .projects { padding: 8rem 4rem; }
@@ -754,26 +759,44 @@ window.addEventListener('scroll', () => {
         requestAnimationFrame(animateHeroIcon);
     }
     animateHeroIcon();
-
-    // Dynamic "I design for ___" headline
     const targetEl = document.getElementById('target');
     
     const targets = [
         'people',
-        'dentists',
-        'doctors',
-        'students',
-        'organizations',
+        'humans',
+        'users',
         'communities',
+        'individuals''dentists',
+        'doctors',
+        'educators',
+        'founders',
+        'researchers'
+        'nature'
         'patients',
-        'creators'
+        'students',
+        'creators',
+        'builders',
+        'leaders'
+        'teams',
+        'organizations',
+        'startups',
+        'nonprofits',
+        'institutions'
+        'impact',
+        'clarity',
+        'access',
+        'meaning',
+        'connection'
+        'need'
+        
+        
     ];
     
-    let lockedToYou = false;
+    let locked = false;
     let lastTarget = targetEl.textContent;
     
     function rotateTarget() {
-        if (lockedToYou) return;
+        if (locked) return;
     
         let next;
         do {
@@ -784,23 +807,22 @@ window.addEventListener('scroll', () => {
         targetEl.textContent = next;
     }
     
-    // Rotate every 1 second
+    // Change every second
     const interval = setInterval(rotateTarget, 1000);
     
-    // Hover or click → YOU
-    function setYou() {
-        if (lockedToYou) return;
+    function lockToYou() {
+        if (locked) return;
     
-        lockedToYou = true;
+        locked = true;
         clearInterval(interval);
     
         targetEl.textContent = 'you';
         targetEl.classList.add('you');
     }
     
-    targetEl.addEventListener('mouseenter', setYou);
-    targetEl.addEventListener('click', setYou);
-
+    // Trigger ONCE — no flicker
+    targetEl.addEventListener('mouseenter', lockToYou, { once: true });
+    targetEl.addEventListener('click', lockToYou);
 
     </script>
 </body>
