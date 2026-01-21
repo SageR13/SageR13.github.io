@@ -33,6 +33,12 @@
         .hero-content{
             position: relative;
             z-index: 1;}
+        .dynamic-headline span {
+            transition: color 0.3s ease, transform 0.3s ease;
+            cursor: pointer;}
+        #focus.you {
+            color: #ff4d4d;
+            transform: scale(1.05);}
         .cta-button { display: inline-block; padding: 1rem 2.5rem; background: var(--accent); color: white; text-decoration: none; border-radius: 50px; font-weight: 600; transition: all 0.3s; }
         .cta-button:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(100,108,255,0.4); }
         .projects { padding: 8rem 4rem; }
@@ -96,7 +102,10 @@
             <img src="decor.png" alt="" class="hero-bg-icon" />
         
             <div class="hero-content">
-                <h1>Innovative Designer<br>& Creator</h1>
+                <h1 class="dynamic-headline">
+                  I design for <span id="audience">people</span><br>
+                  for the <span id="focus">future</span>
+                </h1>
                 <p>Designing human-centered experiences that blend innovation with empathy.</p>
                 <a href="#work" class="cta-button">View My Work</a>
             </div>
@@ -737,6 +746,53 @@ window.addEventListener('scroll', () => {
         requestAnimationFrame(animateHeroIcon);
     }
     animateHeroIcon();
+
+    // Dynamic headline text
+    const audienceEl = document.getElementById('audience');
+    const focusEl = document.getElementById('focus');
+    
+    const audiences = [
+        'people',
+        'dentists',
+        'doctors',
+        'students',
+        'organizations',
+        'communities',
+        'patients',
+        'creators'
+    ];
+    
+    let lastAudience = audienceEl.textContent;
+    
+    function changeAudience() {
+        let next;
+        do {
+            next = audiences[Math.floor(Math.random() * audiences.length)];
+        } while (next === lastAudience);
+    
+        lastAudience = next;
+        audienceEl.textContent = next;
+    }
+    
+    // Change every 5 seconds
+    setInterval(changeAudience, 5000);
+    
+    // Hover OR click → "you"
+    function setYou() {
+        focusEl.textContent = 'you';
+        focusEl.classList.add('you');
+    }
+    
+    // Reset when mouse leaves
+    function resetFocus() {
+        focusEl.textContent = 'future';
+        focusEl.classList.remove('you');
+    }
+    
+    focusEl.addEventListener('mouseenter', setYou);
+    focusEl.addEventListener('click', setYou);
+    focusEl.addEventListener('mouseleave', resetFocus);
+
 
     </script>
 </body>
