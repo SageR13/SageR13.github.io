@@ -18,6 +18,21 @@
         .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 0 4rem; }
         .hero h1 { font-size: clamp(3rem, 8vw, 7rem); font-weight: 800; line-height: 1; margin-bottom: 1.5rem; background: linear-gradient(135deg, #fff, #646cff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .hero p { font-size: 1.5rem; color: rgba(255,255,255,0.7); max-width: 600px; margin-bottom: 3rem; }
+        .hero {position: relative;overflow: hidden;}
+        .hero-bg-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 700px;
+            max-width: 90vw;
+            opacity: 0.25;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 0;
+            transition: transform 0.1s linear;}
+        .hero-content{
+            position: relative;
+            z-index: 1;}
         .cta-button { display: inline-block; padding: 1rem 2.5rem; background: var(--accent); color: white; text-decoration: none; border-radius: 50px; font-weight: 600; transition: all 0.3s; }
         .cta-button:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(100,108,255,0.4); }
         .projects { padding: 8rem 4rem; }
@@ -78,12 +93,15 @@
 
     <div id="main-content">
         <section class="hero">
+            <img src="decor.png" alt="" class="hero-bg-icon" />
+        
             <div class="hero-content">
                 <h1>Innovative Designer<br>& Creator</h1>
                 <p>Designing human-centered experiences that blend innovation with empathy.</p>
                 <a href="#work" class="cta-button">View My Work</a>
             </div>
         </section>
+
 
         <section id="work" class="projects">
             <h2 class="section-title">Selected Work</h2>
@@ -696,6 +714,30 @@
                 });
             });
         });
+        // HERO background icon scroll motion
+const heroIcon = document.querySelector('.hero-bg-icon');
+
+let lastScrollY = window.scrollY;
+
+window.addEventListener('scroll', () => {
+    lastScrollY = window.scrollY;
+});
+
+    function animateHeroIcon() {
+        if (heroIcon) {
+            const x = Math.sin(lastScrollY * 0.015) * 12;
+            const y = Math.cos(lastScrollY * 0.015) * 12;
+            const r = Math.sin(lastScrollY * 0.008) * 4;
+    
+            heroIcon.style.transform = `
+                translate(calc(-50% + ${x}px), calc(-50% + ${y}px))
+                rotate(${r}deg)
+            `;
+        }
+        requestAnimationFrame(animateHeroIcon);
+    }
+    animateHeroIcon();
+
     </script>
 </body>
 </html>
