@@ -33,16 +33,20 @@
         .hero-content{
             position: relative;
             z-index: 1;}
-        .dynamic-headline span {
-            transition: color 0.3s ease, transform 0.3s ease;
-            cursor: pointer;
-            display: inline-block;
+        .dynamic-headline {
+            white-space: nowrap;
         }
-        .dynamic-headline span.you {
+        #target {
+            display: inline-block;
+            min-width: 9ch; /* reserves space for longest word */
+            text-align: left;
+            transition: color 0.25s ease, transform 0.25s ease;
+            cursor: pointer;
+        }
+        #target.you {
             color: #ff4d4d;
             transform: scale(1.05);
         }
-
         .cta-button { display: inline-block; padding: 1rem 2.5rem; background: var(--accent); color: white; text-decoration: none; border-radius: 50px; font-weight: 600; transition: all 0.3s; }
         .cta-button:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(100,108,255,0.4); }
         .projects { padding: 8rem 4rem; }
@@ -765,11 +769,11 @@ window.addEventListener('scroll', () => {
         'creators'
     ];
     
-    let isLockedToYou = false;
+    let lockedToYou = false;
     let lastTarget = targetEl.textContent;
     
     function rotateTarget() {
-        if (isLockedToYou) return;
+        if (lockedToYou) return;
     
         let next;
         do {
@@ -780,24 +784,22 @@ window.addEventListener('scroll', () => {
         targetEl.textContent = next;
     }
     
-    // Rotate every 5 seconds
-    const rotationInterval = setInterval(rotateTarget, 5000);
+    // Rotate every 1 second
+    const interval = setInterval(rotateTarget, 1000);
     
     // Hover or click → YOU
     function setYou() {
-        if (isLockedToYou) return;
+        if (lockedToYou) return;
     
-        isLockedToYou = true;
-        clearInterval(rotationInterval);
+        lockedToYou = true;
+        clearInterval(interval);
     
         targetEl.textContent = 'you';
         targetEl.classList.add('you');
     }
     
-    // Hover & click support
     targetEl.addEventListener('mouseenter', setYou);
     targetEl.addEventListener('click', setYou);
-    
 
 
     </script>
