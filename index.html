@@ -35,10 +35,14 @@
             z-index: 1;}
         .dynamic-headline span {
             transition: color 0.3s ease, transform 0.3s ease;
-            cursor: pointer;}
-        #focus.you {
+            cursor: pointer;
+            display: inline-block;
+        }
+        .dynamic-headline span.you {
             color: #ff4d4d;
-            transform: scale(1.05);}
+            transform: scale(1.05);
+        }
+
         .cta-button { display: inline-block; padding: 1rem 2.5rem; background: var(--accent); color: white; text-decoration: none; border-radius: 50px; font-weight: 600; transition: all 0.3s; }
         .cta-button:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(100,108,255,0.4); }
         .projects { padding: 8rem 4rem; }
@@ -103,9 +107,9 @@
         
             <div class="hero-content">
                 <h1 class="dynamic-headline">
-                  I design for <span id="audience">people</span><br>
-                  for the <span id="focus">future</span>
+                    I design for <span id="target">people</span>
                 </h1>
+
                 <p>Designing human-centered experiences that blend innovation with empathy.</p>
                 <a href="#work" class="cta-button">View My Work</a>
             </div>
@@ -747,11 +751,10 @@ window.addEventListener('scroll', () => {
     }
     animateHeroIcon();
 
-    // Dynamic headline text
-    const audienceEl = document.getElementById('audience');
-    const focusEl = document.getElementById('focus');
+    // Dynamic "I design for ___" headline
+    const targetEl = document.getElementById('target');
     
-    const audiences = [
+    const targets = [
         'people',
         'dentists',
         'doctors',
@@ -762,36 +765,39 @@ window.addEventListener('scroll', () => {
         'creators'
     ];
     
-    let lastAudience = audienceEl.textContent;
+    let isLockedToYou = false;
+    let lastTarget = targetEl.textContent;
     
-    function changeAudience() {
+    function rotateTarget() {
+        if (isLockedToYou) return;
+    
         let next;
         do {
-            next = audiences[Math.floor(Math.random() * audiences.length)];
-        } while (next === lastAudience);
+            next = targets[Math.floor(Math.random() * targets.length)];
+        } while (next === lastTarget);
     
-        lastAudience = next;
-        audienceEl.textContent = next;
+        lastTarget = next;
+        targetEl.textContent = next;
     }
     
-    // Change every 5 seconds
-    setInterval(changeAudience, 5000);
+    // Rotate every 5 seconds
+    const rotationInterval = setInterval(rotateTarget, 5000);
     
-    // Hover OR click → "you"
+    // Hover or click → YOU
     function setYou() {
-        focusEl.textContent = 'you';
-        focusEl.classList.add('you');
+        if (isLockedToYou) return;
+    
+        isLockedToYou = true;
+        clearInterval(rotationInterval);
+    
+        targetEl.textContent = 'you';
+        targetEl.classList.add('you');
     }
     
-    // Reset when mouse leaves
-    function resetFocus() {
-        focusEl.textContent = 'future';
-        focusEl.classList.remove('you');
-    }
+    // Hover & click support
+    targetEl.addEventListener('mouseenter', setYou);
+    targetEl.addEventListener('click', setYou);
     
-    focusEl.addEventListener('mouseenter', setYou);
-    focusEl.addEventListener('click', setYou);
-    focusEl.addEventListener('mouseleave', resetFocus);
 
 
     </script>
