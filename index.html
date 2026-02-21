@@ -27,7 +27,8 @@
 
     /* Main card container */
     .card {
-      width: 560px;
+      width: 100%;
+      max-width: 100vw;
       margin: 0 auto;
       background: #fff;
       min-height: 100vh;
@@ -39,12 +40,12 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 16px;
+      padding: 16px 40px;
       border-bottom: none;
     }
 
     nav .logo {
-      font-size: 10px;
+      font-size: 13px;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: #222;
@@ -54,11 +55,11 @@
 
     nav .nav-links {
       display: flex;
-      gap: 18px;
+      gap: 28px;
     }
 
     nav .nav-links a {
-      font-size: 10px;
+      font-size: 13px;
       letter-spacing: 0.1em;
       text-transform: lowercase;
       color: #888;
@@ -112,22 +113,22 @@
     .home-grid .cell:hover .hover-overlay { opacity: 1; }
 
     .hover-overlay .proj-title {
-      font-size: 13px;
+      font-size: 18px;
       font-weight: 600;
       color: #222;
       letter-spacing: 0.01em;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
 
     .hover-overlay .proj-year {
-      font-size: 10px;
+      font-size: 13px;
       color: #888;
     }
 
     .hover-overlay .proj-desc {
-      font-size: 10px;
+      font-size: 13px;
       color: #666;
-      margin-top: 4px;
+      margin-top: 6px;
       line-height: 1.4;
     }
 
@@ -140,7 +141,7 @@
     }
 
     .cell-areyou .are-you-text {
-      font-size: 38px;
+      font-size: 64px;
       color: #aac8d8;
       line-height: 1.1;
       text-align: center;
@@ -151,12 +152,12 @@
     #page-work { display: none; }
 
     .work-list {
-      padding: 48px 40px;
+      padding: 80px 120px;
     }
 
     .work-list a {
       display: block;
-      font-size: 22px;
+      font-size: 42px;
       letter-spacing: -0.01em;
       color: #222;
       text-decoration: none;
@@ -243,37 +244,37 @@
 
     /* Project content */
     .proj-content {
-      padding: 0 24px 40px;
+      padding: 0 80px 60px;
     }
 
     .proj-content h2 {
-      font-size: 24px;
+      font-size: 36px;
       font-weight: 700;
       color: #222;
-      margin: 28px 0 10px;
+      margin: 40px 0 14px;
     }
 
     .proj-content h3 {
-      font-size: 14px;
+      font-size: 18px;
       font-weight: 700;
       color: #222;
-      margin: 18px 0 6px;
+      margin: 24px 0 8px;
     }
 
     .proj-content p {
-      font-size: 12px;
+      font-size: 15px;
       color: #333;
       line-height: 1.7;
       margin-bottom: 10px;
     }
 
     .proj-content ul {
-      padding-left: 18px;
+      padding-left: 20px;
       margin-bottom: 10px;
     }
 
     .proj-content ul li {
-      font-size: 11px;
+      font-size: 14px;
       color: #444;
       line-height: 1.6;
       margin-bottom: 4px;
@@ -311,7 +312,7 @@
     }
 
     .meta-info .meta-row {
-      font-size: 11px;
+      font-size: 14px;
       color: #333;
       line-height: 1.7;
     }
@@ -326,7 +327,7 @@
     }
 
     .meta-info ul li {
-      font-size: 10px;
+      font-size: 13px;
       color: #444;
       line-height: 1.6;
     }
@@ -335,33 +336,33 @@
     .specs-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin: 12px 0;
+      gap: 12px;
+      margin: 16px 0;
     }
 
     .spec-box {
       background: #3a5fa0;
       color: #fff;
-      padding: 12px;
-      font-size: 10px;
+      padding: 20px;
+      font-size: 13px;
       line-height: 1.7;
     }
 
     /* confiDENT hero banner */
     .confident-hero {
       background: #e8e8f0;
-      padding: 40px 28px;
+      padding: 60px 80px;
       display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 40px;
     }
 
     .confident-hero img {
-      width: 45%;
+      width: 38%;
     }
 
     .confident-hero-text h1 {
-      font-size: 26px;
+      font-size: 48px;
       font-weight: 700;
       color: #222;
       line-height: 1.2;
@@ -387,35 +388,35 @@
       position: absolute;
       bottom: 0;
       left: 0;
-      padding: 20px;
+      padding: 40px 60px;
       color: #fff;
     }
 
     .raccoon-hero-overlay h1 {
-      font-size: 26px;
+      font-size: 48px;
       font-weight: 700;
       line-height: 1.1;
     }
 
     .raccoon-hero-overlay p {
-      font-size: 10px;
-      margin-top: 6px;
+      font-size: 14px;
+      margin-top: 8px;
       opacity: 0.9;
       line-height: 1.4;
     }
 
     .raccoon-hero-overlay .btns {
       display: flex;
-      gap: 8px;
-      margin-top: 10px;
+      gap: 12px;
+      margin-top: 14px;
     }
 
     .raccoon-hero-overlay .btns button {
       background: rgba(255,255,255,0.2);
       border: 1px solid rgba(255,255,255,0.5);
       color: #fff;
-      font-size: 9px;
-      padding: 4px 8px;
+      font-size: 12px;
+      padding: 8px 16px;
       cursor: pointer;
       letter-spacing: 0.05em;
     }
@@ -424,7 +425,7 @@
     .imagimals-hero {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      min-height: 240px;
+      min-height: 360px;
     }
 
     .imagimals-hero img {
@@ -435,22 +436,22 @@
     }
 
     .imagimals-hero-text {
-      padding: 24px 20px;
+      padding: 48px 60px;
       background: #fff;
     }
 
     .imagimals-hero-text h1 {
-      font-size: 26px;
+      font-size: 48px;
       color: #6bb5c8;
       font-style: italic;
       letter-spacing: -0.01em;
     }
 
     .imagimals-hero-text p {
-      font-size: 11px;
+      font-size: 15px;
       color: #888;
       line-height: 1.6;
-      margin-top: 8px;
+      margin-top: 12px;
     }
 
     /* divider */
@@ -459,11 +460,11 @@
     /* Heatra hero */
     .heatra-hero {
       text-align: center;
-      padding: 32px 20px 16px;
+      padding: 48px 40px 20px;
     }
 
     .heatra-hero h1 {
-      font-size: 32px;
+      font-size: 56px;
       font-weight: 700;
       letter-spacing: 0.2em;
       color: #222;
@@ -472,22 +473,22 @@
     .heatra-hero-images {
       display: flex;
       justify-content: center;
-      gap: 16px;
-      padding: 0 24px;
-      margin-bottom: 8px;
+      gap: 24px;
+      padding: 0 60px;
+      margin-bottom: 12px;
     }
 
     .heatra-hero-images img {
-      height: 120px;
+      height: 200px;
       width: auto;
       object-fit: contain;
     }
 
     .heatra-hero p {
-      font-size: 11px;
+      font-size: 15px;
       text-align: center;
       color: #555;
-      padding: 0 40px;
+      padding: 0 160px;
       line-height: 1.5;
     }
 
@@ -496,14 +497,14 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       align-items: center;
-      padding: 24px;
-      gap: 20px;
+      padding: 48px 80px;
+      gap: 40px;
     }
 
     .sandsiege-hero img { width: 100%; display: block; }
 
     .sandsiege-hero-text h1 {
-      font-size: 28px;
+      font-size: 48px;
       font-weight: 700;
       color: #222;
       line-height: 1.1;
@@ -522,9 +523,9 @@
     }
 
     .knead-hero p {
-      font-size: 11px;
+      font-size: 15px;
       color: #555;
-      padding: 12px 24px;
+      padding: 16px 80px;
       text-align: center;
     }
 
@@ -551,9 +552,25 @@
 
     /* about page placeholder */
     #page-about { display: none; }
-    .about-content { padding: 48px 40px; }
-    .about-content h2 { font-size: 28px; font-weight: 700; margin-bottom: 16px; }
-    .about-content p { font-size: 13px; line-height: 1.7; color: #444; }
+    .about-content { padding: 80px 120px; }
+    .about-content h2 { font-size: 40px; font-weight: 700; margin-bottom: 20px; }
+    .about-content p { font-size: 16px; line-height: 1.7; color: #444; }
+
+    /* "Are you" cell */
+    .cell-areyou {
+      background: #f0ecd6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cell-areyou .are-you-text {
+      font-size: 64px;
+      color: #aac8d8;
+      line-height: 1.1;
+      text-align: center;
+      letter-spacing: -0.01em;
+    }
 
     /* back button */
     .back-btn {
@@ -583,23 +600,23 @@
     .quote-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 4px;
-      padding: 16px 24px;
+      gap: 8px;
+      padding: 16px 0;
     }
 
     .quote-item {
-      font-size: 10px;
+      font-size: 14px;
       color: #555;
       font-style: italic;
       line-height: 1.5;
-      padding: 4px;
+      padding: 6px;
     }
 
     /* centered section header */
     .centered-header {
       text-align: center;
-      padding: 20px 0 12px;
-      font-size: 18px;
+      padding: 28px 0 16px;
+      font-size: 24px;
       font-weight: 700;
       color: #222;
     }
@@ -607,13 +624,13 @@
     /* phone mockup row */
     .phone-row {
       display: flex;
-      gap: 4px;
+      gap: 8px;
       overflow-x: auto;
-      padding: 12px 24px;
+      padding: 16px 0;
     }
 
     .phone-row img {
-      height: 160px;
+      height: 240px;
       width: auto;
       display: block;
     }
@@ -621,8 +638,8 @@
     .phone-labels {
       display: flex;
       justify-content: space-around;
-      padding: 0 24px 16px;
-      font-size: 10px;
+      padding: 0 0 24px;
+      font-size: 13px;
       color: #888;
       letter-spacing: 0.05em;
     }
