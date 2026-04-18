@@ -1,143 +1,90 @@
-/* Reset */
+/* Reset & Base Styles */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* Grey background */
 body {
-  background: #e5e5e5;
-  font-family: Helvetica, Arial, sans-serif;
-  color: #111;
+    background-color: #FFFFFF;
+    font-family: 'Inter', sans-serif;
+    color: #000000;
+    line-height: 1.5;
 }
 
-/* Center white container */
-.page {
-  background: white;
-  width: 90%;
-  max-width: 1300px;
-  margin: 80px auto;
-  padding-bottom: 80px;
+/* Navigation */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 42px;
+    max-width: 1512px;
+    margin: 0 auto;
 }
 
-/* Header */
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 40px 60px;
+.logo {
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
 }
 
-.logo a {
-  text-decoration: none;
-  font-size: 13px;
-  letter-spacing: 0.5px;
-  color: #111;
+.nav-links {
+    display: flex;
+    gap: 60px; /* Space between art, work, and about */
 }
 
-nav a {
-  text-decoration: none;
-  font-size: 13px;
-  color: #777;
-  margin-left: 28px;
-  transition: 0.2s ease;
+.nav-links a {
+    text-decoration: none;
+    color: black;
+    font-size: 20px;
 }
 
-nav a:hover {
-  color: #111;
+.font-lacquer {
+    font-family: 'Lacquer', cursive;
+    letter-spacing: 0.80px;
 }
 
-nav a.active {
-  color: #111;
+/* Gallery Grid */
+.gallery-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns as per design */
+    gap: 0px; /* Adjust if you want gutters between images */
+    padding: 0 42px 100px 42px;
+    max-width: 1512px;
+    margin: 0 auto;
 }
 
-/* Grid */
-.grid {
-  padding: 0 60px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
+.grid-item {
+    width: 100%;
+    aspect-ratio: 476 / 404; /* Maintains Figma proportions */
+    overflow: hidden;
+    background: #D9D9D9; /* Placeholder color */
 }
 
-/* Tiles */
-.tile {
-  position: relative;
-  display: block;
-  overflow: hidden;
+.grid-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures images fill the box without distortion */
+    display: block;
+    transition: transform 0.3s ease;
 }
 
-.tile img {
-  width: 100%;
-  display: block;
+.grid-item img:hover {
+    transform: scale(1.02); /* Subtle hover effect */
 }
 
-/* Overlay */
-.overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.92);
-  opacity: 0;
-  transition: 0.25s ease;
-  display: flex;
-  align-items: center;
-  padding-left: 40px;
+/* Responsive Tweaks */
+@media (max-width: 1024px) {
+    .gallery-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
-.tile:hover .overlay {
-  opacity: 1;
-}
-
-.overlay-content h3 {
-  font-weight: 400;
-  font-size: 18px;
-  margin-bottom: 6px;
-}
-
-.overlay-content p {
-  font-size: 13px;
-  margin-bottom: 6px;
-}
-
-.overlay-content span {
-  font-size: 13px;
-  color: #555;
-}
-
-/* Work Page */
-.work-list {
-  padding: 100px 120px;
-}
-
-.work-list h1 {
-  font-size: 40px;
-  font-weight: 300;
-  letter-spacing: 2px;
-  margin-bottom: 24px;
-}
-
-/* Responsive */
-@media (max-width: 1000px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 700px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
-  .page {
-    width: 95%;
-    margin: 40px auto;
-  }
-
-  header {
-    padding: 30px;
-  }
-
-  .grid {
-    padding: 0 30px;
-  }
+@media (max-width: 600px) {
+    .gallery-container {
+        grid-template-columns: 1fr;
+    }
+    .nav-links {
+        gap: 20px;
+    }
 }
