@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>blink — Sage Rebello</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black:  #0d0d0d;
+  --mid:    #666;
+  --light:  #f5f5f3;
+  --border: #e0e0da;
+  --accent: #4a9fc4;
+  --green:  #5a9e4b;
+  --max:    860px;
+  --pad:    clamp(20px, 5vw, 60px);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #fff;
+  color: var(--black);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a { text-decoration: none; color: inherit; }
+img, video { display: block; max-width: 100%; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 22px var(--pad);
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-size: 0.72rem; font-weight: 500;
+  letter-spacing: 0.2em; text-transform: uppercase;
+}
+.nav-links { display: flex; gap: 28px; }
+.nav-links a {
+  font-size: 0.82rem; color: var(--mid);
+  letter-spacing: 0.04em; transition: color .2s;
+}
+.nav-links a:hover { color: var(--black); }
+
+/* ── HERO ── */
+.hero {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 140px var(--pad) 80px;
+  border-bottom: 1px solid var(--border);
+}
+.hero-kicker {
+  font-size: 0.68rem; font-weight: 500;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--mid); margin-bottom: 20px;
+}
+.hero-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(3.2rem, 8vw, 6.4rem);
+  line-height: 1.0; color: var(--black);
+  margin-bottom: 28px;
+}
+.hero-title em { font-style: italic; color: var(--accent); }
+.hero-sub {
+  font-size: 1.05rem; line-height: 1.75;
+  color: var(--mid); max-width: 520px;
+  margin-bottom: 56px;
+}
+.hero-meta {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--border);
+  padding-top: 32px;
+}
+.hero-meta-col { padding-right: 24px; }
+.hero-meta-col:not(:last-child) {
+  border-right: 1px solid var(--border);
+  margin-right: 24px;
+}
+.meta-key {
+  font-size: 0.62rem; font-weight: 500;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--mid); margin-bottom: 8px;
+}
+.meta-val { font-size: 0.88rem; line-height: 1.5; color: var(--black); }
+
+/* ── HERO IMAGE ── */
+.hero-image {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--pad);
+  display: flex; justify-content: center;
+}
+.hero-image img {
+  width: 340px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+/* ── SECTION SYSTEM ── */
+.section {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 80px var(--pad);
+  border-bottom: 1px solid var(--border);
+}
+.section-kicker {
+  font-size: 0.62rem; font-weight: 500;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--mid); margin-bottom: 20px;
+}
+.section-heading {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  line-height: 1.1; color: var(--black);
+  margin-bottom: 40px;
+}
+.section-heading em { font-style: italic; color: var(--accent); }
+.section-body {
+  font-size: 1rem; line-height: 1.8;
+  color: #444; max-width: 640px;
+}
+
+/* ── IMPACT ROW ── */
+.impact-row {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--border);
+  border-radius: 4px; overflow: hidden;
+  margin-top: 48px;
+}
+.impact-cell {
+  padding: 36px 28px;
+  border-right: 1px solid var(--border);
+}
+.impact-cell:last-child { border-right: none; }
+.impact-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2.8rem; line-height: 1;
+  color: var(--black); margin-bottom: 10px;
+}
+.impact-desc { font-size: 0.82rem; line-height: 1.55; color: var(--mid); }
+
+/* ── DETAIL GRID ── */
+.detail-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 4px; overflow: hidden;
+  margin-bottom: 48px;
+}
+.detail-cell { background: #fff; padding: 28px 24px; }
+.detail-cell .dc-key {
+  font-size: 0.6rem; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--mid); margin-bottom: 8px;
+}
+.detail-cell .dc-val { font-size: 0.9rem; line-height: 1.55; color: var(--black); }
+
+/* ── QUOTES ── */
+.quotes {
+  display: flex; flex-direction: column; gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 4px; overflow: hidden;
+  margin-top: 48px;
+}
+.quote { background: #fff; padding: 32px 28px; }
+.quote-text {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.15rem; font-style: italic;
+  line-height: 1.65; color: var(--black);
+  margin-bottom: 16px;
+}
+.quote-attr {
+  font-size: 0.68rem; font-weight: 500;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--mid);
+}
+
+/* ── FINDINGS ── */
+.findings {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 4px; overflow: hidden;
+  margin-top: 48px;
+}
+.finding { background: #fff; padding: 28px 24px; }
+.finding-key {
+  font-size: 0.6rem; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 10px;
+}
+.finding-text { font-size: 0.92rem; line-height: 1.6; color: var(--black); }
+
+/* ── CONCEPT SPLIT ── */
+.concept-split {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 60px; align-items: center;
+}
+.concept-split img, .concept-split video {
+  width: 100%; border-radius: 4px;
+  border: 1px solid var(--border);
+}
+.concept-body {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  font-style: italic; line-height: 1.65;
+  color: var(--black); margin-bottom: 28px;
+}
+.tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag {
+  font-size: 0.72rem; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--mid);
+  border: 1px solid var(--border);
+  padding: 6px 14px; border-radius: 2px;
+}
+
+/* ── SPECS GRID ── */
+.specs-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 4px; overflow: hidden;
+}
+.spec-cell { background: #fff; padding: 28px 24px; }
+.spec-key {
+  font-size: 0.6rem; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--mid); margin-bottom: 10px;
+}
+.spec-val {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.6rem; line-height: 1;
+  color: var(--black); margin-bottom: 6px;
+}
+.spec-unit { font-size: 0.82rem; color: var(--mid); line-height: 1.5; }
+
+/* ── FULL IMAGE ── */
+.full-image {
+  width: 100%; border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+/* ── ITER GRID ── */
+.iter-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 4px; overflow: hidden;
+  margin-top: 1px;
+}
+.iter-cell { background: #fff; padding: 28px 24px; }
+.iter-label {
+  font-size: 0.6rem; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 6px;
+}
+.iter-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.1rem; color: var(--black); margin-bottom: 12px;
+}
+.iter-body { font-size: 0.85rem; line-height: 1.6; color: var(--mid); }
+
+/* ── COMPARISON TABLE ── */
+.compare-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 4px; overflow: hidden;
+  margin-top: 48px;
+}
+.compare-cell { background: #fff; padding: 28px 20px; }
+.compare-cell.highlight { background: #f0f7f0; }
+.compare-key {
+  font-size: 0.62rem; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--mid); margin-bottom: 10px;
+}
+.compare-label {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1rem; color: var(--black);
+  margin-bottom: 10px;
+}
+.compare-label.green { color: var(--green); }
+.compare-body { font-size: 0.82rem; line-height: 1.6; color: var(--mid); }
+
+/* ── PROTO HERO ── */
+.proto-hero {
+  position: relative;
+  border-radius: 4px; overflow: hidden;
+  border: 1px solid var(--border);
+  margin-bottom: 1px;
+}
+.proto-hero img {
+  width: 100%; max-height: 560px;
+  object-fit: cover; display: block;
+}
+.proto-hero-label {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 28px 32px;
+  background: linear-gradient(to top, rgba(10,10,20,0.72) 0%, transparent 100%);
+  color: white;
+}
+.proto-badge {
+  display: inline-block;
+  font-size: 0.62rem; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  border: 1px solid rgba(255,255,255,0.4);
+  padding: 4px 12px; border-radius: 2px;
+  margin-bottom: 10px; color: white;
+}
+.proto-hero-label p { font-size: 0.88rem; opacity: 0.8; line-height: 1.5; }
+
+.proto-slides {
+  display: flex; gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 4px; overflow: hidden;
+  margin-bottom: 64px;
+}
+.proto-slide { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.proto-slide img {
+  width: 100%; aspect-ratio: 4/3;
+  object-fit: cover; display: block;
+}
+.proto-slide-cap {
+  background: #fff; padding: 14px 16px;
+  font-size: 0.65rem; font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--mid);
+}
+
+/* ── APP DIVIDER ── */
+.app-divider {
+  border-top: 1px solid var(--border);
+  padding-top: 48px; margin-bottom: 32px;
+}
+.app-divider-kicker {
+  font-size: 0.62rem; font-weight: 500;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--mid); margin-bottom: 12px;
+}
+.app-divider-desc {
+  font-size: 0.95rem; line-height: 1.75;
+  color: #444; max-width: 540px;
+}
+
+/* ── APP SCROLL ── */
+.app-scroll {
+  display: flex; gap: 16px;
+  overflow-x: auto; padding-bottom: 16px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 calc(-1 * var(--pad));
+  padding-left: var(--pad); padding-right: var(--pad);
+}
+.app-scroll::-webkit-scrollbar { height: 2px; }
+.app-scroll::-webkit-scrollbar-track { background: var(--light); }
+.app-scroll::-webkit-scrollbar-thumb { background: var(--border); }
+.app-item {
+  flex-shrink: 0; scroll-snap-align: start;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.app-item img {
+  height: 500px; width: auto;
+  border-radius: 4px; border: 1px solid var(--border);
+}
+.app-label {
+  font-size: 0.65rem; font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--mid); text-align: center;
+}
+
+/* ── FOOTER ── */
+footer {
+  max-width: var(--max); margin: 0 auto;
+  padding: 48px var(--pad);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-name {
+  font-size: 0.72rem; font-weight: 500;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--mid);
+}
+.footer-back { font-size: 0.78rem; color: var(--mid); transition: color .2s; }
+.footer-back:hover { color: var(--black); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 680px) {
+  .hero-meta { grid-template-columns: 1fr; gap: 24px; }
+  .hero-meta-col { border-right: none !important; margin-right: 0 !important; padding-right: 0; }
+  .impact-row { grid-template-columns: 1fr; }
+  .impact-cell { border-right: none; border-bottom: 1px solid var(--border); }
+  .impact-cell:last-child { border-bottom: none; }
+  .detail-grid, .findings, .specs-grid, .compare-grid { grid-template-columns: 1fr; }
+  .concept-split { grid-template-columns: 1fr; gap: 32px; }
+  .iter-grid { grid-template-columns: 1fr; }
+  .proto-slides { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Sage Rebello</a>
+  <div class="nav-links">
+    <a href="art.html">art</a>
+    <a href="work.html">work</a>
+    <a href="about.html">about</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="hero-kicker">AR Companion &nbsp;·&nbsp; UX/UI · Illustration &nbsp;·&nbsp; 2026</p>
+  <h1 class="hero-title">a playful AR companion —<br><em>blink</em></h1>
+  <p class="hero-sub">An AR app that lets your favorite objects talk back with the personality you've always imagined for them.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-col">
+      <div class="meta-key">Role</div>
+      <div class="meta-val">UI/UX Designer<br>Animator · Illustrator</div>
+    </div>
+    <div class="hero-meta-col">
+      <div class="meta-key">Team</div>
+      <div class="meta-val">2 members<br>jüb studio</div>
+    </div>
+    <div class="hero-meta-col">
+      <div class="meta-key">Duration</div>
+      <div class="meta-val">11 weeks</div>
+    </div>
+  </div>
+</div>
+
+<div class="hero-image">
+  <img src="tit.png" alt="blink AR companion">
+</div>
+
+<!-- 01 PROBLEM -->
+<section class="section">
+  <p class="section-kicker">01 &nbsp;·&nbsp; The Problem</p>
+  <h2 class="section-heading">College students can't find<br><em>someone to talk to.</em></h2>
+  <p class="section-body">College students (18–22) often struggle to find someone available and accepting to talk to, leaving them feeling unable to express themselves and increasingly isolated.</p>
+
+  <div class="impact-row">
+    <div class="impact-cell">
+      <div class="impact-num">29/30</div>
+      <div class="impact-desc">people we interviewed have already talked to an inanimate object</div>
+    </div>
+    <div class="impact-cell">
+      <div class="impact-num">3</div>
+      <div class="impact-desc">core needs went unmet — active listening, validation, and a consistent presence</div>
+    </div>
+    <div class="impact-cell">
+      <div class="impact-num">0</div>
+      <div class="impact-desc">existing AI companions let you author the object you already love and trust</div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 RESEARCH -->
+<section class="section">
+  <p class="section-kicker">02 &nbsp;·&nbsp; Research</p>
+  <h2 class="section-heading">Authorship is<br><em>the whole variable.</em></h2>
+  <p class="section-body">We ran three identical sessions — the only difference was whether the user chose, named, and shaped the object before hearing it speak. That single variable did all the work.</p>
+
+  <div class="quotes">
+    <div class="quote">
+      <p class="quote-text">"It is no longer part of my imagination. I want my toy to be something whose soul is given by me."</p>
+      <p class="quote-attr">Research participant &nbsp;·&nbsp; self-scanned object session</p>
+    </div>
+    <div class="quote">
+      <p class="quote-text">"Compared to a real best friend, the difference is that I can truly say anything to this toy."</p>
+      <p class="quote-attr">Research participant &nbsp;·&nbsp; pre-scanned object session</p>
+    </div>
+    <div class="quote">
+      <p class="quote-text">"In real life, people often buy toys because they can provide companionship and will never leave."</p>
+      <p class="quote-attr">Research participant &nbsp;·&nbsp; general interview</p>
+    </div>
+  </div>
+
+  <div class="findings">
+    <div class="finding">
+      <div class="finding-key">Self-scanned object</div>
+      <div class="finding-text">"She didn't realize it was AI." Full authorship created genuine connection — users brought existing trust to the conversation.</div>
+    </div>
+    <div class="finding">
+      <div class="finding-key">Pre-scanned, no authorship</div>
+      <div class="finding-text">"Why an apple? It's cool, but I don't see a difference from any other AR companion." Without authorship, novelty wore off fast.</div>
+    </div>
+    <div class="finding">
+      <div class="finding-key">Key insight</div>
+      <div class="finding-text">What people need is active listening, validation, trust, and presence — not a chatbot. The object already has the trust deposited. We just give it a way to answer back.</div>
+    </div>
+    <div class="finding">
+      <div class="finding-key">Design Principle</div>
+      <div class="finding-text">A relationship only forms when both sides have something at stake. The object must have needs — hunger, moods, a bond that grows or fades.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 CONCEPT -->
+<section class="section">
+  <p class="section-kicker">03 &nbsp;·&nbsp; The Concept</p>
+  <h2 class="section-heading">A soul for what<br><em>you already love.</em></h2>
+
+  <div class="concept-split">
+    <video autoplay muted loop playsinline>
+      <source src="record.mp4" type="video/mp4">
+    </video>
+    <div>
+      <p class="concept-body">Photograph any object you love. It wakes up in AR, anchored in your place — with the exact personality you shaped for it.</p>
+      <div class="tag-row">
+        <span class="tag">AR Object Recognition</span>
+        <span class="tag">Personality Blend</span>
+        <span class="tag">AI Voice Conversation</span>
+        <span class="tag">Evolving Bond</span>
+        <span class="tag">Illustrated UI</span>
+        <span class="tag">Prompt Engineering</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 FEATURES -->
+<section class="section">
+  <p class="section-kicker">04 &nbsp;·&nbsp; Features</p>
+  <h2 class="section-heading">Scan. Shape.<br><em>Live with it.</em></h2>
+
+  <div class="specs-grid" style="grid-template-columns: repeat(3,1fr);">
+    <div class="spec-cell">
+      <div class="spec-key">01 &nbsp;·&nbsp; Scan</div>
+      <div class="spec-val">Any object</div>
+      <div class="spec-unit">Photograph something you already love. It wakes up in AR, anchored in your space.</div>
+    </div>
+    <div class="spec-cell">
+      <div class="spec-key">02 &nbsp;·&nbsp; Shape</div>
+      <div class="spec-val">9 personalities</div>
+      <div class="spec-unit">Choose two traits to blend — shy, sassy, warm, humorous, diplomatic, and more. Name it. Decorate it.</div>
+    </div>
+    <div class="spec-cell">
+      <div class="spec-key">03 &nbsp;·&nbsp; Live with it</div>
+      <div class="spec-val">Grows over time</div>
+      <div class="spec-unit">Talk to it. Feed it. Watch a relationship form across days as your bond level deepens.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 PROMPT DESIGN -->
+<section class="section">
+  <p class="section-kicker">05 &nbsp;·&nbsp; Prompt Design</p>
+  <h2 class="section-heading">The AI that<br><em>refuses to serve.</em></h2>
+  <p class="section-body">The hardest design problem wasn't the interface — it was the prompt. Standard AI responses kill connection. We built a framework that makes the object feel real.</p>
+
+  <div class="detail-grid" style="margin-top: 40px; margin-bottom: 0;">
+    <div class="detail-cell">
+      <div class="dc-key">Act, Don't Serve</div>
+      <div class="dc-val">Give the LLM a character sheet, not instructions. NEVER be helpful. NEVER say "you should."</div>
+    </div>
+    <div class="detail-cell">
+      <div class="dc-key">Feel the Body</div>
+      <div class="dc-val">Hunger = "hollow ache." Emotions become physical sensations — not descriptions of feelings.</div>
+    </div>
+    <div class="detail-cell">
+      <div class="dc-key">Make Them Wait</div>
+      <div class="dc-val">Scarcity creates anticipation. Cooldown periods make the object feel rare — we miss what's gone.</div>
+    </div>
+    <div class="detail-cell">
+      <div class="dc-key">Evolve Over Time</div>
+      <div class="dc-val">From guarded stranger to soulmate. Bond level changes the prompt — the relationship genuinely deepens.</div>
+    </div>
+  </div>
+
+  <div class="findings" style="margin-top: 1px;">
+    <div class="finding">
+      <div class="finding-key">Prompt Assembly</div>
+      <div class="finding-text">Core Identity + Inner Wiring + Body State + Bond Level → Behavior. All five layers combine at session start.</div>
+    </div>
+    <div class="finding">
+      <div class="finding-key">Session Lifecycle</div>
+      <div class="finding-text">Idle → Waking → Connecting → Listening → Speaking → Sleeping → Cooldown → back to Idle. The object has rhythms, not just responses.</div>
+    </div>
+    <div class="finding">
+      <div class="finding-key">Tech Stack</div>
+      <div class="finding-text">Token fetch → LiveKit → AI Agent → Voice Effect → AR Object. Each layer of the pipeline was designed to feel invisible.</div>
+    </div>
+    <div class="finding">
+      <div class="finding-key">Personality Spectrum</div>
+      <div class="finding-text">Introvert axis: Shy · Warm · Patient. Extrovert axis: Energetic · Optimistic · Sassy. Rational axis: Articulate · Diplomatic · Humorous.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 PROCESS -->
+<section class="section">
+  <p class="section-kicker">06 &nbsp;·&nbsp; Process</p>
+  <h2 class="section-heading">What failed.<br><em>What we learned.</em></h2>
+  <p class="section-body" style="margin-bottom: 40px;">Two major iterations taught us everything. The frog calendar. The talking apple. Both collapsed for the same reason: only one side was investing.</p>
+
+  <div class="iter-grid" style="margin-top: 0;">
+    <div class="iter-cell">
+      <div class="iter-label">v1 &nbsp;·&nbsp; Mood Calendar</div>
+      <div class="iter-title">A mirror, not a relationship</div>
+      <p class="iter-body">The user tracked moods, journaled growth. The object had nothing at stake — it never asked for anything in return. The relationship was incomplete because only one side was investing.</p>
+    </div>
+    <div class="iter-cell">
+      <div class="iter-label">v2 &nbsp;·&nbsp; Generic AR Object</div>
+      <div class="iter-title">Novelty dies in minutes</div>
+      <p class="iter-body">We made objects come alive — and watched conversations die within minutes. The novelty of "the apple is talking" wears off. Without authorship, every session felt like a tech demo.</p>
+    </div>
+    <div class="iter-cell">
+      <div class="iter-label">v3 &nbsp;·&nbsp; Your Object</div>
+      <div class="iter-title">Trust already deposited</div>
+      <p class="iter-body">User chooses the object, names it, shapes its personality before hearing it speak. That single variable — authorship — transformed a demo into a relationship. Users stayed. The bond was real.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 07 COMPETITIVE LANDSCAPE -->
+<section class="section">
+  <p class="section-kicker">07 &nbsp;·&nbsp; Competitive Landscape</p>
+  <h2 class="section-heading">Why everything else<br><em>falls short.</em></h2>
+
+  <div class="compare-grid">
+    <div class="compare-cell">
+      <div class="compare-key">Replika · Character.AI</div>
+      <div class="compare-label">Human-mimicking AI</div>
+      <p class="compare-body">Pretends to be a person. The pretense breaks under pressure, and the friendship breaks with it.</p>
+    </div>
+    <div class="compare-cell">
+      <div class="compare-key">Tamagotchi</div>
+      <div class="compare-label">Needy, but voiceless</div>
+      <p class="compare-body">You feed it. You bury it. You cry when it dies. But it can never tell you what it was thinking.</p>
+    </div>
+    <div class="compare-cell">
+      <div class="compare-key">Anki Vector · Cozmo</div>
+      <div class="compare-label">Embodied, but generic</div>
+      <p class="compare-body">Real, physical, charming — but expensive, narrow, and shipped from a factory. It was never yours before it arrived.</p>
+    </div>
+    <div class="compare-cell highlight">
+      <div class="compare-key">Blink</div>
+      <div class="compare-label green">A soul for what you already love</div>
+      <p class="compare-body">Your object. Your trust, already deposited. We just give it a way to answer back.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 08 FINAL DESIGN -->
+<section class="section">
+  <p class="section-kicker">08 &nbsp;·&nbsp; Final Design</p>
+  <h2 class="section-heading">The app.</h2>
+  <p class="section-body" style="margin-bottom: 40px;">A hand-illustrated, whimsical UI that feels like the world your blink lives in — warm, layered, and alive. The visual language was designed to lower the emotional threshold for talking to an object.</p>
+
+  <div class="proto-hero">
+    <img src="gp.png" alt="blink — final product in use">
+    <div class="proto-hero-label">
+      <span class="proto-badge">Final Product</span>
+      <p>Illustrated AR companion — scan any object, shape its soul, watch a bond form</p>
+    </div>
+  </div>
+
+  <div class="proto-slides">
+    <div class="proto-slide">
+      <img src="back.png" alt="blink splash screen">
+      <div class="proto-slide-cap">Splash &amp; world</div>
+    </div>
+    <div class="proto-slide">
+      <img src="pers.png" alt="blink personality selection">
+      <div class="proto-slide-cap">Personality shape</div>
+    </div>
+    <div class="proto-slide">
+      <img src="liv.png" alt="blink in AR">
+      <div class="proto-slide-cap">Live AR companion</div>
+    </div>
+  </div>
+
+  <div class="app-divider">
+    <div class="app-divider-kicker">App Screens</div>
+    <p class="app-divider-desc">Onboarding, object scan, personality selection, decoration, live AR conversation, and the feeding ritual — each screen hand-illustrated to feel like part of the same living world.</p>
+  </div>
+
+  <div class="app-scroll">
+    <div class="app-item">
+      <img src="onb.png" alt="Onboarding">
+      <div class="app-label">Onboarding</div>
+    </div>
+    <div class="app-item">
+      <img src="b1.png" alt="Scan Object">
+      <div class="app-label">Scan Object</div>
+    </div>
+    <div class="app-item">
+      <img src="pers.png" alt="Shape Personality">
+      <div class="app-label">Shape Personality</div>
+    </div>
+    <div class="app-item">
+      <img src="personality.png" alt="Decorate">
+      <div class="app-label">Decorate</div>
+    </div>
+    <div class="app-item">
+      <img src="liv.png" alt="Live Conversation">
+      <div class="app-label">Live Conversation</div>
+    </div>
+    <div class="app-item">
+      <img src="feed.png" alt="Feed Your Blink">
+      <div class="app-label">Feed Your Blink</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-name">Sage Rebello</span>
+  <a href="work.html" class="footer-back">← Back to work</a>
+</footer>
+
+</body>
+</html>
