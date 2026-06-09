@@ -1,27 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sage Ellen Rebello — Work</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Lacquer&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Lacquer&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .work-page {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .work-hover-image {
+            position: fixed;
+            right: 7vw;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 340px;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .work-hover-image img {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+
+        .work-hover-image img.visible {
+            opacity: 1;
+        }
+
+        .work-link {
+            position: relative;
+            transition: color 0.15s ease, padding-left 0.15s ease;
+        }
+
+        .work-link:hover {
+            padding-left: 6px;
+        }
+    </style>
+</head>
 <body>
-<div class="page">
+    <nav>
+        <a href="index.html" class="nav-logo">Sage Rebello</a>
+        <div class="nav-links">
+            <a href="art.html">art</a>
+            <a href="work.html">work</a>
+            <a href="about.html">about</a>
+        </div>
+    </nav>
 
-<header>
-  <div class="logo">
-    <a href="index.html">SAGE REBELLO</a>
-  </div>
+    <main class="work-page">
+        <a href="talkIT.html"        class="work-link" data-img="talkIT.png">talkIT</a>
+        <a href="confi.html"         class="work-link" data-img="teeth.png">confiDENT</a>
+        <a href="rockOnRaccoon.html" class="work-link" data-img="rockIpad.png">Rock On, Raccoon!</a>
+        <a href="imagimals.html"     class="work-link" data-img="imagimals.png">Imagimals</a>
+        <a href="knead.html"         class="work-link" data-img="knead.png">Knead for Speed</a>
+        <a href="heatra.html"        class="work-link" data-img="heatraApp.png">Heatra</a>
+        <a href="blink.html"         class="work-link" data-img="blinkSplash.png">Blink</a>
 
-  <nav>
-    <a href="art.html">art</a>
-    <a class="active" href="work.html">work</a>
-    <a href="#">about</a>
-  </nav>
-</header>
+        <!-- Image panel (fixed, right side) -->
+        <div class="work-hover-image" id="work-hover-image">
+            <img src="talkIT.png"        alt="" data-for="talkIT.png">
+            <img src="teeth.png"         alt="" data-for="teeth.png">
+            <img src="rockIpad.png"      alt="" data-for="rockIpad.png">
+            <img src="imagimals.png"     alt="" data-for="imagimals.png">
+            <img src="knead.png"         alt="" data-for="knead.png">
+            <img src="heatraApp.png"     alt="" data-for="heatraApp.png">
+            <img src="blinkSplash.png"   alt="" data-for="blinkSplash.png">
+        </div>
+    </main>
 
-<section class="work-list">
-  <h1>confiDENT</h1>
-  <h1>Rock On, Raccoon!</h1>
-  <h1>Imagimals</h1>
-  <h1>Knead for Speed</h1>
-  <h1>Heatra</h1>
-  <h1>Sand Siege</h1>
-  <h1>Bink</h1>
-</section>
+    <script>
+        const links  = document.querySelectorAll('.work-link');
+        const images = document.querySelectorAll('#work-hover-image img');
 
-</div>
+        let current = null;
+
+        links.forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                const target = link.dataset.img;
+                images.forEach(img => {
+                    const isMatch = img.dataset.for === target;
+                    img.classList.toggle('visible', isMatch);
+                });
+                current = target;
+            });
+
+            link.addEventListener('mouseleave', () => {
+                images.forEach(img => img.classList.remove('visible'));
+                current = null;
+            });
+        });
+    </script>
 </body>
+</html>
