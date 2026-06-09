@@ -2,7 +2,7 @@
 //  PORTFOLIO ACCESS GATE
 //  Change ACCESS_CODE to your 4-digit code.
 // ─────────────────────────────────────────
-const ACCESS_CODE = "1234";
+const ACCESS_CODE = "4143";
 const SESSION_KEY = "sage_access_granted";
 
 (function () {
