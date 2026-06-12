@@ -13,6 +13,7 @@
   --mid:    #666;
   --light:  #f5f5f3;
   --border: #e0e0da;
+  --blue:   #4B61B6;
   --max:    860px;
   --pad:    clamp(20px, 5vw, 60px);
 }
@@ -42,12 +43,70 @@ nav {
 .nav-links { display: flex; gap: 28px; }
 .nav-links a { font-size: 0.82rem; color: var(--mid); letter-spacing: 0.04em; transition: color .2s; }
 .nav-links a:hover { color: var(--black); }
+.nav-links a.current { color: var(--black); font-weight: 500; }
+
+/* ── BIO SECTION ── */
+.bio-section {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 140px var(--pad) 80px;
+  border-bottom: 1px solid var(--border);
+}
+
+.bio-kicker {
+  font-size: 0.62rem; font-weight: 500;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--mid); margin-bottom: 20px;
+}
+
+.bio-heading {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+  line-height: 1.05; color: var(--black);
+  margin-bottom: 40px;
+}
+.bio-heading em { font-style: italic; color: var(--blue); }
+
+/* Two-column bio layout */
+.bio-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+  margin-bottom: 56px;
+}
+
+.bio-text p {
+  font-size: 1rem; line-height: 1.85;
+  color: #444; margin-bottom: 20px;
+}
+.bio-text p:last-child { margin-bottom: 0; }
+
+.bio-sidebar {
+  display: flex; flex-direction: column; gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 4px; overflow: hidden;
+}
+
+.bio-fact {
+  background: #fff;
+  padding: 20px 22px;
+}
+.bio-fact-key {
+  font-size: 0.6rem; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--mid); margin-bottom: 6px;
+}
+.bio-fact-val {
+  font-size: 0.9rem; line-height: 1.55; color: var(--black);
+}
 
 /* ── CONTACT SECTION ── */
 .contact-section {
   max-width: var(--max);
   margin: 0 auto;
-  padding: 140px var(--pad) 80px;
+  padding: 80px var(--pad);
   border-bottom: 1px solid var(--border);
 }
 
@@ -93,9 +152,7 @@ nav {
   display: flex; flex-direction: column; gap: 8px;
 }
 
-.form-field.full {
-  grid-column: 1 / -1;
-}
+.form-field.full { grid-column: 1 / -1; }
 
 .field-label {
   font-size: 0.6rem; font-weight: 500;
@@ -116,32 +173,21 @@ nav {
 }
 
 .field-input::placeholder,
-.field-textarea::placeholder {
-  color: #bbb;
-}
+.field-textarea::placeholder { color: #bbb; }
 
-.field-input:focus ~ .field-border,
-.field-textarea:focus ~ .field-border {
-  opacity: 1;
-}
-
-.field-textarea {
-  min-height: 140px;
-}
+.field-textarea { min-height: 140px; }
 
 /* ── SUBMIT ROW ── */
 .form-submit-row {
   background: #fff;
-  padding: 24px 24px;
+  padding: 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
 }
 
-.form-note {
-  font-size: 0.75rem; color: var(--mid); line-height: 1.5;
-}
+.form-note { font-size: 0.75rem; color: var(--mid); line-height: 1.5; }
 
 .submit-btn {
   display: inline-flex; align-items: center; gap: 8px;
@@ -176,9 +222,7 @@ nav {
   font-size: 1.6rem; font-style: italic;
   color: var(--black); margin-bottom: 10px;
 }
-.success-body {
-  font-size: 0.88rem; color: var(--mid); line-height: 1.7;
-}
+.success-body { font-size: 0.88rem; color: var(--mid); line-height: 1.7; }
 
 /* ── LINKS ROW ── */
 .contact-links {
@@ -216,7 +260,8 @@ footer {
 }
 
 /* ── RESPONSIVE ── */
-@media (max-width: 560px) {
+@media (max-width: 640px) {
+  .bio-body { grid-template-columns: 1fr; gap: 32px; }
   .form-row { grid-template-columns: 1fr; }
   .form-submit-row { flex-direction: column; align-items: flex-start; }
   .contact-links { flex-direction: column; }
@@ -228,13 +273,56 @@ footer {
 <nav>
   <a href="index.html" class="nav-logo">Sage Rebello</a>
   <div class="nav-links">
-    <a href="art.html">art</a>
     <a href="work.html">work</a>
-    <a href="about.html">about</a>
+    <a href="art.html">art</a>
+    <a href="about.html" class="current">about</a>
   </div>
 </nav>
 
-<!-- CONTACT SECTION — drop this into your about.html -->
+<!-- BIO -->
+<section class="bio-section">
+  <p class="bio-kicker">About</p>
+  <h1 class="bio-heading">Designer, maker,<br><em>curious person.</em></h1>
+
+  <div class="bio-body">
+    <div class="bio-text">
+      <p>I'm Sage Rebello! I'ma product designer and developer focused on building things that feel considered and work well.</p>
+      <p>My work spans mobile apps, physical prototypes, and digital experiences. I'm drawn to problems where design can reduce friction and give people a little more confidence in what they're doing.</p>
+      <p>When I'm not designing, I'm making art, playing ice hockey, taking things apart to see how they work, or looking for the best hiking spot.</p>
+    </div>
+
+<div class="bio-sidebar">
+    <div class="bio-fact">
+      <div class="bio-fact-key">Based in</div>
+      <div class="bio-fact-val">Rhode Island</div>
+    </div>
+    <div class="bio-fact">
+      <div class="bio-fact-key">Currently</div>
+      <div class="bio-fact-val">Available to create &amp; collaborate!</div>
+    </div>
+    <div class="bio-fact">
+      <div class="bio-fact-key">Education</div>
+      <div class="bio-fact-val">
+        M.A. Design Engineering — RISD &amp; Brown University<br>
+        B.F.A. — Cornell University
+      </div>
+    </div>
+    <div class="bio-fact">
+      <div class="bio-fact-key">Interests</div>
+      <div class="bio-fact-val">Product Design, Design Engineering, UI/UX, Physical Computing, Motion Graphics</div>
+    </div>
+    <div class="bio-fact">
+      <div class="bio-fact-key">Languages</div>
+      <div class="bio-fact-val">Java, C++, Python, JavaScript, HTML, CSS, R</div>
+    </div>
+    <div class="bio-fact">
+      <div class="bio-fact-key">Software</div>
+      <div class="bio-fact-val">Figma, Adobe Suite, Procreate, Maya, GitHub, Miro, Canva, CAD, Microsoft Suite</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
 <section class="contact-section">
   <p class="contact-kicker">Contact</p>
   <h2 class="contact-heading">Leave me<br><em>a note.</em></h2>
@@ -249,47 +337,25 @@ footer {
     <div class="form-row">
       <div class="form-field">
         <label class="field-label" for="name">Name</label>
-        <input
-          class="field-input"
-          id="name" name="name"
-          type="text"
-          placeholder="Your name"
-          required
-        >
+        <input class="field-input" id="name" name="name" type="text" placeholder="Your name" required>
       </div>
       <div class="form-field">
         <label class="field-label" for="email">Email</label>
-        <input
-          class="field-input"
-          id="email" name="email"
-          type="email"
-          placeholder="your@email.com"
-          required
-        >
+        <input class="field-input" id="email" name="email" type="email" placeholder="your@email.com" required>
       </div>
     </div>
 
     <div class="form-row">
       <div class="form-field full">
         <label class="field-label" for="subject">Subject</label>
-        <input
-          class="field-input"
-          id="subject" name="subject"
-          type="text"
-          placeholder="What's it about?"
-        >
+        <input class="field-input" id="subject" name="subject" type="text" placeholder="What's it about?">
       </div>
     </div>
 
     <div class="form-row">
       <div class="form-field full">
         <label class="field-label" for="message">Message</label>
-        <textarea
-          class="field-textarea"
-          id="message" name="message"
-          placeholder="Write your note here..."
-          required
-        ></textarea>
+        <textarea class="field-textarea" id="message" name="message" placeholder="Write your note here..." required></textarea>
       </div>
     </div>
 
@@ -309,7 +375,14 @@ footer {
     <p class="success-body">Thanks for reaching out — I'll be in touch soon.</p>
   </div>
 
-
+  <div class="contact-links">
+    <a href="https://www.linkedin.com/in/sage-rebello-a11205241/" target="_blank" class="contact-link">
+      <div>
+        <span class="contact-link-label">LinkedIn</span>
+        sagerebello
+      </div>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M9 4L13 8L9 12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
 </section>
 
 <footer>
