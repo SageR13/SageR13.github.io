@@ -1,0 +1,7 @@
+.heroWrap {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  min-width: 0;
+  overflow-x: clip;
+}

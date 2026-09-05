@@ -1,0 +1,144 @@
+.section {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: clamp(108px, 16vh, 156px) var(--pad);
+}
+
+.sectionCompact {
+  padding: clamp(32px, 5vh, 48px) var(--pad);
+}
+
+.gridCompact {
+  padding: clamp(24px, 4vw, 36px);
+  border-radius: 28px;
+}
+
+.copyCompact {
+  max-width: 42rem;
+}
+
+.titleCompact {
+  margin: 0 0 16px;
+  font-size: clamp(1.5rem, 3.2vw, 2rem);
+  font-weight: var(--weight-display);
+  line-height: 1.12;
+  letter-spacing: var(--tracking-section);
+  color: var(--ink);
+}
+
+
+.grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: clamp(40px, 7vw, 96px);
+  padding: clamp(28px, 4vw, 40px);
+  border-radius: 28px;
+}
+
+.panel {
+  padding: clamp(32px, 5vw, 48px);
+  border-radius: 28px;
+}
+
+.label {
+  margin: 0 0 24px;
+  font-size: 10px;
+  font-weight: var(--weight-display);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--ink-52);
+}
+
+.title {
+  margin: 0 0 28px;
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 6.5vw, 5rem);
+  font-weight: var(--weight-display);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+}
+
+.lineWrap {
+  display: block;
+  overflow: hidden;
+}
+
+.line,
+.lineMuted {
+  display: block;
+}
+
+.lineMuted {
+  margin-top: 0.12em;
+  color: var(--ink-62);
+}
+
+.textAccent {
+  color: var(--ref-coral);
+}
+
+.body {
+  margin: 0;
+  max-width: 44ch;
+  font-size: 0.9375rem;
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-body);
+  color: var(--ink-56);
+}
+
+.availability {
+  margin: 16px 0 0;
+  font-size: 10px;
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--ref-coral);
+}
+
+.facts {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.block {
+  padding: 22px 20px;
+  border-radius: 18px;
+  border: none;
+}
+
+.blockLabel {
+  margin: 0 0 14px;
+  font-size: 10px;
+  font-weight: var(--weight-display);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--ink-52);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.list li {
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.education {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--ink-56);
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

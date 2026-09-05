@@ -1,0 +1,102 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% -10%, rgb(255 255 255 / 0.92) 0%, transparent 42%),
+    linear-gradient(180deg, #edf2fb 0%, var(--ref-bg) 38%, #dde8fb 100%);
+}
+
+.orbBlue,
+.orbViolet,
+.orbCyan,
+.orbMagenta {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(72px);
+  opacity: 0.55;
+  will-change: transform;
+}
+
+.orbBlue {
+  top: -8%;
+  left: -6%;
+  width: min(52vw, 620px);
+  height: min(52vw, 620px);
+  background: radial-gradient(circle, rgb(var(--ref-b1-rgb) / 0.55) 0%, transparent 68%);
+  animation: driftBlue 22s ease-in-out infinite alternate;
+}
+
+.orbViolet {
+  top: 18%;
+  right: -10%;
+  width: min(48vw, 560px);
+  height: min(48vw, 560px);
+  background: radial-gradient(circle, rgb(var(--ref-lavender-rgb) / 0.48) 0%, transparent 70%);
+  animation: driftViolet 26s ease-in-out infinite alternate;
+}
+
+.orbCyan {
+  bottom: 8%;
+  left: 18%;
+  width: min(44vw, 520px);
+  height: min(44vw, 520px);
+  background: radial-gradient(circle, rgb(var(--ref-sky-rgb) / 0.42) 0%, transparent 72%);
+  animation: driftCyan 24s ease-in-out infinite alternate;
+}
+
+.orbMagenta {
+  bottom: -12%;
+  right: 12%;
+  width: min(40vw, 480px);
+  height: min(40vw, 480px);
+  background: radial-gradient(circle, rgb(var(--ref-magenta-rgb) / 0.28) 0%, transparent 70%);
+  animation: driftMagenta 28s ease-in-out infinite alternate;
+}
+
+@keyframes driftBlue {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(8vw, 10vh, 0) scale(1.08);
+  }
+}
+
+@keyframes driftViolet {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(-7vw, 8vh, 0) scale(1.06);
+  }
+}
+
+@keyframes driftCyan {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(6vw, -6vh, 0) scale(1.1);
+  }
+}
+
+@keyframes driftMagenta {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(-5vw, -8vh, 0) scale(1.05);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbBlue,
+  .orbViolet,
+  .orbCyan,
+  .orbMagenta {
+    animation: none;
+  }
+}
