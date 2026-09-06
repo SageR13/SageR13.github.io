@@ -1,254 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sage Ellen Rebello - Portfolio</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Lacquer&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Lacquer&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <style>
-        /* ── overlay text fix ── */
-        .overlay {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: flex-end;
-            /* enough padding so text never touches the edge */
-            padding: 12px;
-            box-sizing: border-box;
-            overflow: hidden;       /* hard stop — nothing escapes the card */
-        }
-
-        .overlay-copy {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            /* constrain to the card width */
-            width: 100%;
-            min-width: 0;
-        }
-
-        .overlay-title,
-        .overlay-year,
-        .overlay-subtitle {
-            display: block;
-            white-space: normal;        /* allow wrapping */
-            word-break: break-word;     /* break long words if needed */
-            overflow: hidden;
-            /* scale font with card size so it always fits */
-            font-size: clamp(0.6rem, 1.4vw, 0.95rem);
-            line-height: 1.3;
-        }
-
-        .overlay-title {
-            font-weight: 600;
-            font-size: clamp(0.65rem, 1.6vw, 1rem);
-        }
-
-        .overlay-year {
-            opacity: 0.7;
-            font-size: clamp(0.55rem, 1.1vw, 0.78rem);
-        }
-    </style>
-</head>
-<body class="index-body">
-    <nav>
-        <a href="index.html" class="nav-logo">Sage Rebello</a>
-        <div class="nav-links">
-            
-            <a href="work.html">work</a>
-            <a href="art.html">art</a>
-            <a href="about.html">about</a>
-        </div>
-    </nav>
-    <div class="gallery-container">
-    <a href="imagimals.html">
-        <div class="grid-item">
-            <img src="imagimals.png" alt="Imagimals">
-            <div class="overlay">
-                <div class="overlay-copy">
-                    <span class="overlay-title">Imagimals</span>
-                    <span class="overlay-year">2026</span>
-                    <span class="overlay-subtitle">smart modular night light</span>
-                </div>
-            </div>
-        </div>
-    </a>
-    <a href="confi.html">
-        <div class="grid-item">
-            <img src="teeth.png" alt="Teeth">
-            <div class="overlay">
-                <div class="overlay-copy">
-                    <span class="overlay-title">confiDENT</span>
-                    <span class="overlay-year">2025</span>
-                    <span class="overlay-subtitle">at-home dental monitoring device</span>
-                </div>
-            </div>
-        </div>
-    </a>
-    <a href="blink.html">
-        <div class="grid-item">
-            <img src="blinkSplash.png" alt="Blink">
-            <div class="overlay">
-                <div class="overlay-copy">
-                    <span class="overlay-title">Blink</span>
-                    <span class="overlay-year">2026</span>
-                    <span class="overlay-subtitle">Experimental AR companion app</span>
-                </div>
-            </div>
-        </div>
-    </a>
-    <a href="imagimals.html">
-        <div class="grid-item">
-            <img src="sand.png" alt="Sand">
-            <div class="overlay">
-                <div class="overlay-copy">
-                    <span class="overlay-title">Imagimals</span>
-                    <span class="overlay-year">2026</span>
-                    <span class="overlay-subtitle">woodworking process</span>
-                </div>
-            </div>
-        </div>
-    </a>
-    <a href="talkIT.html">
-        <div class="grid-item">
-            <img src="talkIT.png" alt="app conversation page">
-            <div class="overlay">
-                <div class="overlay-copy">
-                    <span class="overlay-title">talkIT</span>
-                    <span class="overlay-year">2026</span>
-                    <span class="overlay-subtitle">AI-powered language learning app</span>
-                </div>
-            </div>
-        </div>
-    </a>
-    <a href="confi.html">
-        <div class="grid-item">
-            <img src="blueConfident.png" alt="Confident">
-            <div class="overlay">
-                <div class="overlay-copy">
-                    <span class="overlay-title">confiDENT</span>
-                    <span class="overlay-year">2025</span>
-                    <span class="overlay-subtitle">at-home dental monitoring device</span>
-                </div>
-            </div>
-        </div>
-    </a>
-    <a href="heatra.html">
-        <div class="grid-item">
-            <img src="heatraApp.png" alt="Heatra App">
-            <div class="overlay">
-                <div class="overlay-copy">
-                    <span class="overlay-title">HEATRA</span>
-                    <span class="overlay-year">2025</span>
-                    <span class="overlay-subtitle">mobile UI for on-the-go discreet heating pad</span>
-                </div>
-            </div>
-        </div>
-    </a>
-    <a href="knead.html">
-        <div class="grid-item">
-            <img src="knead.png" alt="Knead for Speed">
-            <div class="overlay">
-                <div class="overlay-copy">
-                    <span class="overlay-title">Knead for Speed</span>
-                    <span class="overlay-year">2024</span>
-                    <span class="overlay-subtitle">stealth, action P.C video game</span>
-                </div>
-            </div>
-        </div>
-    </a>
-    <a href="rockOnRaccoon.html">
-        <div class="grid-item">
-            <img src="rockIpad.png" alt="Rock On, Raccoon!">
-            <div class="overlay">
-                <div class="overlay-copy">
-                    <span class="overlay-title">Rock On, Raccoon!</span>
-                    <span class="overlay-year">2023</span>
-                    <span class="overlay-subtitle">mobile rhythm game</span>
-                </div>
-            </div>
-        </div>
-    </a>
-    <a href="imagimals.html">
-        <div class="grid-item">
-            <img src="woodenMagnets.png" alt="Wooden Magnets">
-            <div class="overlay">
-                <div class="overlay-copy">
-                    <span class="overlay-title">Imagimal's Magnets</span>
-                    <span class="overlay-year">2026</span>
-                    <span class="overlay-subtitle">wooden magnets</span>
-                </div>
-            </div>
-        </div>
-    </a>
-    <a href="heatra.html">
-        <div class="grid-item">
-            <img src="heatraWear.png" alt="Heatra Wear">
-            <div class="overlay">
-                <div class="overlay-copy">
-                    <span class="overlay-title">HEATRA</span>
-                    <span class="overlay-year">2025</span>
-                    <span class="overlay-subtitle">discreet wearable heating pad</span>
-                </div>
-            </div>
-        </div>
-    </a>
-    <a href="imagimals.html">
-        <div class="grid-item">
-            <img src="imagimalWire.png" alt="Imagimal Wire">
-            <div class="overlay">
-                <div class="overlay-copy">
-                    <span class="overlay-title">Imagimal Wire</span>
-                    <span class="overlay-year">2026</span>
-                    <span class="overlay-subtitle">wireframe study</span>
-                </div>
-            </div>
-        </div>
-    </a>
-    <a href="car.html">
-        <div class="grid-item">
-            <img src="commer.png" alt="Course Correct app">
-            <div class="overlay">
-                <div class="overlay-copy">
-                    <span class="overlay-title">Course Correct</span>
-                    <span class="overlay-year">2026</span>
-                    <span class="overlay-subtitle">driving instructor app</span>
-                </div>
-            </div>
-        </div>
-    </a>
-    <a href="confi.html">
-        <div class="grid-item">
-            <img src="confiApp.png" alt="Confi App">
-            <div class="overlay">
-                <div class="overlay-copy">
-                    <span class="overlay-title">confiDENT</span>
-                    <span class="overlay-year">2025</span>
-                    <span class="overlay-subtitle">at-home dental monitoring device</span>
-                </div>
-            </div>
-        </div>
-    </a>
-    <a href="heatra.html">
-        <div class="grid-item">
-            <video width="476" height="404" controls>
-                <source src="warm.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-            <div class="overlay">
-                <div class="overlay-copy">
-                    <span class="overlay-title">HEATRA</span>
-                    <span class="overlay-year">2025</span>
-                    <span class="overlay-subtitle">temperature test</span>
-                </div>
-            </div>
-        </div>
-    </a>
-    </div>
-<script src="gate.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Sage Rebello — Product Designer specializing in UI/UX, research, and design engineering. Case studies in health tech, XR, wearables, and interaction design."
+    />
+    <meta name="theme-color" content="#e4ebf8" />
+    <meta property="og:title" content="Sage Rebello — Product Designer / UI/UX" />
+    <meta
+      property="og:description"
+      content="Portfolio of product design case studies — from research and systems to shipped prototypes."
+    />
+    <meta property="og:type" content="website" />
+    <title>Sage Rebello — Product Designer / UI/UX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script type="module" crossorigin src="/assets/index-BMEXPFmW.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-sv9oGBPV.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
 </html>
