@@ -8,6 +8,21 @@
       content="Sage Rebello — Product Designer specializing in UI/UX, research, and design engineering. Case studies in health tech, XR, wearables, and interaction design."
     />
     <meta name="theme-color" content="#e4ebf8" />
+    <script>
+      (function () {
+        var stored = localStorage.getItem('sage-portfolio-theme');
+        var theme =
+          stored === 'dark' || stored === 'light'
+            ? stored
+            : window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light';
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', theme === 'dark' ? '#0f1117' : '#e4ebf8');
+      })();
+    </script>
     <meta property="og:title" content="Sage Rebello — Product Designer / UI/UX" />
     <meta
       property="og:description"
@@ -18,8 +33,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <script type="module" crossorigin src="/assets/index-DtGNt5zC.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-C_1pTtwX.css">
+    <script type="module" crossorigin src="/assets/index-C5tQ2NnE.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-CX6e0NMN.css">
   </head>
   <body>
     <div id="root"></div>
