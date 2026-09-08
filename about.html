@@ -19,6 +19,14 @@
               : 'light';
         document.documentElement.dataset.theme = theme;
         document.documentElement.style.colorScheme = theme;
+        var fontStored = localStorage.getItem('sage-portfolio-font-scale');
+        var fontScale = fontStored ? parseInt(fontStored, 10) : 100;
+        if (!isNaN(fontScale)) {
+          fontScale = Math.min(200, Math.max(100, Math.round(fontScale / 10) * 10));
+          document.documentElement.style.setProperty('--font-scale', String(fontScale / 100));
+          document.documentElement.dataset.fontScale = String(fontScale);
+          document.documentElement.classList.toggle('font-scale-large', fontScale >= 130);
+        }
         var meta = document.querySelector('meta[name="theme-color"]');
         if (meta) meta.setAttribute('content', theme === 'dark' ? '#0f1117' : '#e4ebf8');
       })();
@@ -33,8 +41,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <script type="module" crossorigin src="/assets/index-C5tQ2NnE.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-CX6e0NMN.css">
+    <script type="module" crossorigin src="/assets/index-DdnBI1MV.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BhWpUXKu.css">
   </head>
   <body>
     <div id="root"></div>
