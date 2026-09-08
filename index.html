@@ -27,6 +27,26 @@
           document.documentElement.dataset.fontScale = String(fontScale);
           document.documentElement.classList.toggle('font-scale-large', fontScale >= 130);
         }
+        function readBool(key) {
+          var value = localStorage.getItem(key);
+          return value === 'true';
+        }
+        document.documentElement.classList.toggle(
+          'a11y-dyslexia-font',
+          readBool('sage-portfolio-a11y-dyslexia-font'),
+        );
+        document.documentElement.classList.toggle(
+          'a11y-reduce-motion',
+          readBool('sage-portfolio-a11y-reduce-motion'),
+        );
+        document.documentElement.classList.toggle(
+          'a11y-high-contrast',
+          readBool('sage-portfolio-a11y-high-contrast'),
+        );
+        document.documentElement.classList.toggle(
+          'a11y-focus-visible',
+          readBool('sage-portfolio-a11y-focus-highlight'),
+        );
         var meta = document.querySelector('meta[name="theme-color"]');
         if (meta) meta.setAttribute('content', theme === 'dark' ? '#0f1117' : '#e4ebf8');
       })();
@@ -41,8 +61,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <script type="module" crossorigin src="/assets/index-CUmPSZr0.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-DrdWxA4c.css">
+    <script type="module" crossorigin src="/assets/index-QY8Z0V0J.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-C5nHKXyd.css">
   </head>
   <body>
     <div id="root"></div>
