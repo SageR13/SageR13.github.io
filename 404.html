@@ -11,12 +11,7 @@
     <script>
       (function () {
         var stored = localStorage.getItem('sage-portfolio-theme');
-        var theme =
-          stored === 'dark' || stored === 'light'
-            ? stored
-            : window.matchMedia('(prefers-color-scheme: dark)').matches
-              ? 'dark'
-              : 'light';
+        var theme = stored === 'dark' ? 'dark' : 'light';
         document.documentElement.dataset.theme = theme;
         document.documentElement.style.colorScheme = theme;
         var fontStored = localStorage.getItem('sage-portfolio-font-scale');
@@ -61,7 +56,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <script type="module" crossorigin src="/assets/index-BvP2xRYB.js"></script>
+    <script type="module" crossorigin src="/assets/index-DBn5M8pc.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-DXfVHiuA.css">
   </head>
   <body>
