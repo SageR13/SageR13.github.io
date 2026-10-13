@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Sage Rebello — Product Designer specializing in UI/UX, research, and design engineering. Case studies in health tech, XR, wearables, and interaction design."
+    />
+    <meta name="theme-color" content="#e4ebf8" />
+    <script>
+      (function () {
+        var stored = localStorage.getItem('sage-portfolio-theme');
+        var theme = stored === 'dark' ? 'dark' : 'light';
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+        var fontStored = localStorage.getItem('sage-portfolio-font-scale');
+        var fontScale = fontStored ? parseInt(fontStored, 10) : 100;
+        if (!isNaN(fontScale)) {
+          fontScale = Math.min(200, Math.max(100, Math.round(fontScale / 10) * 10));
+          document.documentElement.style.setProperty('--font-scale', String(fontScale / 100));
+          document.documentElement.dataset.fontScale = String(fontScale);
+          document.documentElement.classList.toggle('font-scale-large', fontScale >= 130);
+        }
+        function readBool(key) {
+          var value = localStorage.getItem(key);
+          return value === 'true';
+        }
+        document.documentElement.classList.toggle(
+          'a11y-dyslexia-font',
+          readBool('sage-portfolio-a11y-dyslexia-font'),
+        );
+        document.documentElement.classList.toggle(
+          'a11y-reduce-motion',
+          readBool('sage-portfolio-a11y-reduce-motion'),
+        );
+        document.documentElement.classList.toggle(
+          'a11y-high-contrast',
+          readBool('sage-portfolio-a11y-high-contrast'),
+        );
+        document.documentElement.classList.toggle(
+          'a11y-focus-visible',
+          readBool('sage-portfolio-a11y-focus-highlight'),
+        );
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', theme === 'dark' ? '#0f1117' : '#e4ebf8');
+      })();
+    </script>
+    <meta property="og:title" content="Sage Rebello — Product Designer / UI/UX" />
+    <meta
+      property="og:description"
+      content="Portfolio of product design case studies — from research and systems to shipped prototypes."
+    />
+    <meta property="og:type" content="website" />
+    <title>Sage Rebello — Product Designer / UI/UX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script type="module" crossorigin src="/assets/index-Cbit34Rd.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-DXfVHiuA.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
